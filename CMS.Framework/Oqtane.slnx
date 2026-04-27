@@ -1,5 +1,8 @@
 <Solution>
-  <Project Path="Oqtane.Server\Oqtane.Server.csproj" DefaultStartup="true" />
+  <Folder Name="/Solution Items/">
+    <File Path="../.gitignore" />
+  </Folder>
   <Project Path="Oqtane.Client\Oqtane.Client.csproj" />
+  <Project Path="Oqtane.Server\Oqtane.Server.csproj" />
   <Project Path="Oqtane.Shared\Oqtane.Shared.csproj" />
 </Solution>
