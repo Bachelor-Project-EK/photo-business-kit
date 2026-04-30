@@ -1,6 +1,8 @@
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+
+
 builder.AddServiceDefaults();
 
 builder.CreateUmbracoBuilder()
@@ -10,6 +12,8 @@ builder.CreateUmbracoBuilder()
     .Build();
 
 WebApplication app = builder.Build();
+
+app.Logger.LogInformation("Env: {env}", app.Environment.EnvironmentName);
 
 app.MapDefaultEndpoints();
 
