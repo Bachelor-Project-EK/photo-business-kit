@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="CMS.Umbraco.AppHost/CMS.Umbraco.AppHost.csproj" Id="6aa40201-94b9-46ff-a000-f2ca44a537f1" />
+  <Project Path="CMS.Umbraco.ServiceDefaults/CMS.Umbraco.ServiceDefaults.csproj" />
+  <Project Path="CMS.Umbraco/CMS.Umbraco.csproj" />
+</Solution>
