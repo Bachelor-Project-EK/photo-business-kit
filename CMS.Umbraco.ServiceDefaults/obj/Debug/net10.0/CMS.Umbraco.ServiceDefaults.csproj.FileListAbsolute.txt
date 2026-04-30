@@ -1,0 +1,13 @@
+C:\Users\shero\source\repos\photo-business-kit\CMS.Umbraco.ServiceDefaults\bin\Debug\net10.0\CMS.Umbraco.ServiceDefaults.deps.json
+C:\Users\shero\source\repos\photo-business-kit\CMS.Umbraco.ServiceDefaults\bin\Debug\net10.0\CMS.Umbraco.ServiceDefaults.dll
+C:\Users\shero\source\repos\photo-business-kit\CMS.Umbraco.ServiceDefaults\bin\Debug\net10.0\CMS.Umbraco.ServiceDefaults.pdb
+C:\Users\shero\source\repos\photo-business-kit\CMS.Umbraco.ServiceDefaults\obj\Debug\net10.0\CMS.Umbraco.ServiceDefaults.csproj.AssemblyReference.cache
+C:\Users\shero\source\repos\photo-business-kit\CMS.Umbraco.ServiceDefaults\obj\Debug\net10.0\CMS.Umbraco.ServiceDefaults.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\shero\source\repos\photo-business-kit\CMS.Umbraco.ServiceDefaults\obj\Debug\net10.0\CMS.Umbraco.ServiceDefaults.AssemblyInfoInputs.cache
+C:\Users\shero\source\repos\photo-business-kit\CMS.Umbraco.ServiceDefaults\obj\Debug\net10.0\CMS.Umbraco.ServiceDefaults.AssemblyInfo.cs
+C:\Users\shero\source\repos\photo-business-kit\CMS.Umbraco.ServiceDefaults\obj\Debug\net10.0\CMS.Umbraco.ServiceDefaults.csproj.CoreCompileInputs.cache
+C:\Users\shero\source\repos\photo-business-kit\CMS.Umbraco.ServiceDefaults\obj\Debug\net10.0\CMS.Umbraco.ServiceDefaults.sourcelink.json
+C:\Users\shero\source\repos\photo-business-kit\CMS.Umbraco.ServiceDefaults\obj\Debug\net10.0\CMS.Umbraco.ServiceDefaults.dll
+C:\Users\shero\source\repos\photo-business-kit\CMS.Umbraco.ServiceDefaults\obj\Debug\net10.0\refint\CMS.Umbraco.ServiceDefaults.dll
+C:\Users\shero\source\repos\photo-business-kit\CMS.Umbraco.ServiceDefaults\obj\Debug\net10.0\CMS.Umbraco.ServiceDefaults.pdb
+C:\Users\shero\source\repos\photo-business-kit\CMS.Umbraco.ServiceDefaults\obj\Debug\net10.0\ref\CMS.Umbraco.ServiceDefaults.dll
