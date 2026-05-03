@@ -1,0 +1,5 @@
+{
+  "appHost": {
+    "path": "CMS.Umbraco.AppHost/CMS.Umbraco.AppHost.csproj"
+  }
+}

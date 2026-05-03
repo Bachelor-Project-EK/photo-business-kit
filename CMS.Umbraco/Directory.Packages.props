@@ -4,6 +4,8 @@
     <CentralPackageFloatingVersionsEnabled>true</CentralPackageFloatingVersionsEnabled>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="Aspire.Microsoft.Data.SqlClient" Version="13.2.4" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.15.3" />
     <PackageVersion Include="Umbraco.Cms" Version="17.3.4" />
     <PackageVersion Include="Umbraco.Cms.DevelopmentMode.Backoffice" Version="17.3.4" />
     <PackageVersion Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
