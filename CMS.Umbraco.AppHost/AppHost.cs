@@ -1,5 +1,15 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddProject<Projects.CMS_Umbraco>("cms-umbraco");
+var compose = builder.AddDockerComposeEnvironment("compose")
+                     .WithProperties(env =>
+                     {
+                         env.DashboardEnabled = true;
+                     });
+
+var umbraco = builder.AddProject<Projects.CMS_Umbraco>("cms-umbraco")
+                     .PublishAsDockerComposeService((resource, service) =>
+                     {
+                         service.Name = "umbraco";
+                     });
 
 builder.Build().Run();
