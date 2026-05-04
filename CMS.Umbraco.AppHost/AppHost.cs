@@ -26,6 +26,9 @@ var sql = builder.AddSqlServer("umbraco-db", password)
     .WithDockerfile(
         contextPath: "../Database")
     .WithDataVolume("umb_database")
+    .WithEnvironment("ACCEPT_EULA", "Y")
+    .WithEnvironment("SA_PASSWORD", password)
+    .WithEnvironment("MSSQL_SA_PASSWORD", password)
     .PublishAsDockerComposeService((resource, service) =>
     {
         service.Name = "umbraco-db";
@@ -68,35 +71,35 @@ builder.AddContainer("umbraco-cms", "umbraco.cms")
             {
                 Name = "media",
                 Type = "bind",
-                Source = "./CMS.Umbraco/wwwroot/media",
+                Source = "../CMS.Umbraco/wwwroot/media",
                 Target = "/app/wwwroot/media"
             },
             new()
             {
                 Name = "scripts",
                 Type = "bind",
-                Source = "./CMS.Umbraco/wwwroot/scripts",
+                Source = "../CMS.Umbraco/wwwroot/scripts",
                 Target = "/app/wwwroot/scripts"
             },
             new()
             {
                 Name = "css",
                 Type = "bind",
-                Source = "./CMS.Umbraco/wwwroot/css",
+                Source = "../CMS.Umbraco/wwwroot/css",
                 Target = "/app/wwwroot/css"
             },
             new()
             {
                 Name = "Views",
                 Type = "bind",
-                Source = "./CMS.Umbraco/wwwroot/views",
+                Source = "../CMS.Umbraco/wwwroot/views",
                 Target = "/app/wwwroot/views"
             },
             new()
             {
                 Name = "models",
                 Type = "bind",
-                Source = "./CMS.Umbraco/wwwroot/models",
+                Source = "../CMS.Umbraco/wwwroot/models",
                 Target = "/app/wwwroot/models"
             },
             new()
