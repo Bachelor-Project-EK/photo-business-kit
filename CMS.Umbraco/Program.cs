@@ -1,0 +1,36 @@
+
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+
+
+builder.AddServiceDefaults();
+
+builder.CreateUmbracoBuilder()
+    .AddBackOffice()
+    .AddWebsite()
+    .AddComposers()
+    .Build();
+
+WebApplication app = builder.Build();
+
+app.Logger.LogInformation("Env: {env}", app.Environment.EnvironmentName);
+
+app.MapDefaultEndpoints();
+
+
+await app.BootUmbracoAsync();
+
+
+app.UseUmbraco()
+    .WithMiddleware(u =>
+    {
+        u.UseBackOffice();
+        u.UseWebsite();
+    })
+    .WithEndpoints(u =>
+    {
+        u.UseBackOfficeEndpoints();
+        u.UseWebsiteEndpoints();
+    });
+
+await app.RunAsync();
