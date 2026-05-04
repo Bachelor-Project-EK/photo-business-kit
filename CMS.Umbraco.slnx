@@ -6,6 +6,7 @@
     <File Path="Database/startup.sh" />
   </Folder>
   <Folder Name="/Solution Items/">
+    <File Path=".gitattributes" />
     <File Path=".gitignore" />
   </Folder>
   <Project Path="CMS.Umbraco.AppHost/CMS.Umbraco.AppHost.csproj" Id="6aa40201-94b9-46ff-a000-f2ca44a537f1" />

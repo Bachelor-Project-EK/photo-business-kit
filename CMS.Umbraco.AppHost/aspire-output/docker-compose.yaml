@@ -14,7 +14,6 @@ services:
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "${DB_PASSWORD}"
-      SA_PASSWORD: "${DB_PASSWORD}"
     ports:
       - "1433:1433"
       - "1434:1434"
@@ -50,25 +49,32 @@ services:
     volumes:
       - type: "bind"
         target: "/app/wwwroot/media"
-        source: "../CMS.Umbraco/wwwroot/media"
+        source: "${UMBRACO_CMS_BINDMOUNT_0}"
+        read_only: false
       - type: "bind"
         target: "/app/wwwroot/scripts"
-        source: "../CMS.Umbraco/wwwroot/scripts"
+        source: "${UMBRACO_CMS_BINDMOUNT_1}"
+        read_only: false
       - type: "bind"
         target: "/app/wwwroot/css"
-        source: "../CMS.Umbraco/wwwroot/css"
+        source: "${UMBRACO_CMS_BINDMOUNT_2}"
+        read_only: false
       - type: "bind"
-        target: "/app/wwwroot/views"
-        source: "../CMS.Umbraco/wwwroot/views"
+        target: "/app/wwwroot/Views"
+        source: "${UMBRACO_CMS_BINDMOUNT_3}"
+        read_only: false
       - type: "bind"
         target: "/app/wwwroot/models"
-        source: "../CMS.Umbraco/wwwroot/models"
+        source: "${UMBRACO_CMS_BINDMOUNT_4}"
+        read_only: false
       - type: "volume"
-        target: "/app_data"
-        source: "umb_data"
-      - type: "volume"
-        target: "/logs"
+        target: "/app/umbraco/Logs"
         source: "umb_logs"
+        read_only: false
+      - type: "volume"
+        target: "/app/umbraco"
+        source: "umb_data"
+        read_only: false
     depends_on:
       umbraco-db:
         condition: "service_healthy"
@@ -78,6 +84,9 @@ networks:
   aspire:
     driver: "bridge"
 volumes:
-  umb_database: {}
-  umb_data: {}
-  umb_logs: {}
+  umb_database:
+    driver: "local"
+  umb_logs:
+    driver: "local"
+  umb_data:
+    driver: "local"

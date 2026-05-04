@@ -2,23 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddDockerComposeEnvironment("env")
-    .WithDashboard(enabled: true)
-    .ConfigureComposeFile(source =>
-    {
-        source.AddVolume(new()
-        {
-            Name = "umb_database",
-        });
-        source.AddVolume(new()
-        {
-            Name = "umb_data",
-        });
-        source.AddVolume(new()
-        {
-            Name = "umb_logs",
-        });
-    });
+builder.AddDockerComposeEnvironment("env");
 
 var password = builder.AddParameter("db-password", secret: true);
 
@@ -26,12 +10,9 @@ var sql = builder.AddSqlServer("umbraco-db", password)
     .WithDockerfile(
         contextPath: "../Database")
     .WithDataVolume("umb_database")
-    .WithEnvironment("ACCEPT_EULA", "Y")
-    .WithEnvironment("SA_PASSWORD", password)
     .WithEnvironment("MSSQL_SA_PASSWORD", password)
     .PublishAsDockerComposeService((resource, service) =>
     {
-        service.Name = "umbraco-db";
         service.Healthcheck = new()
         {
             Test =
@@ -58,65 +39,18 @@ builder.AddContainer("umbraco-cms", "umbraco.cms")
     .WithEnvironment("ASPNETCORE_Kestrel__Certificates__Default__Password", "DevOnlyPassword")
     .WithEnvironment("ConnectionStrings__umbracoDbDSN", sql.Resource.ConnectionStringExpression)
     .WithEnvironment("ConnectionStrings__umbracoDbDSN_ProviderName", "Microsoft.Data.SqlClient")
+    .WithBindMount("../../CMS.Umbraco/wwwroot/media", "/app/wwwroot/media")
+    .WithBindMount("../../CMS.Umbraco/wwwroot/scripts", "/app/wwwroot/scripts")
+    .WithBindMount("../../CMS.Umbraco/wwwroot/css", "/app/wwwroot/css")
+    .WithBindMount("../../CMS.Umbraco/Views", "/app/wwwroot/Views")
+    .WithBindMount("../../CMS.Umbraco/umbraco/models", "/app/wwwroot/models")
+    .WithVolume("umb_logs", "/app/umbraco/Logs")
+    .WithVolume("umb_data", "/app/umbraco")
     .WithHttpsEndpoint(44372, 8081)
     .WithExternalHttpEndpoints()
     .WaitFor(sql)
     .PublishAsDockerComposeService((resource, service) =>
     {
-        service.Name = "umbraco-cms";
-        service.Ports = ["44372:8081"];
-        service.Volumes = new()
-        {
-            new()
-            {
-                Name = "media",
-                Type = "bind",
-                Source = "../CMS.Umbraco/wwwroot/media",
-                Target = "/app/wwwroot/media"
-            },
-            new()
-            {
-                Name = "scripts",
-                Type = "bind",
-                Source = "../CMS.Umbraco/wwwroot/scripts",
-                Target = "/app/wwwroot/scripts"
-            },
-            new()
-            {
-                Name = "css",
-                Type = "bind",
-                Source = "../CMS.Umbraco/wwwroot/css",
-                Target = "/app/wwwroot/css"
-            },
-            new()
-            {
-                Name = "Views",
-                Type = "bind",
-                Source = "../CMS.Umbraco/wwwroot/views",
-                Target = "/app/wwwroot/views"
-            },
-            new()
-            {
-                Name = "models",
-                Type = "bind",
-                Source = "../CMS.Umbraco/wwwroot/models",
-                Target = "/app/wwwroot/models"
-            },
-            new()
-            {
-                Name = "umb_data",
-                Type = "volume",
-                Source = "umb_data",
-                Target = "/app_data"
-            },
-            new()
-            {
-                Name = "umb_logs",
-                Type = "volume",
-                Source = "umb_logs",
-                Target = "/logs"
-            }
-        };
         service.DependsOn = new()
         {
             { "umbraco-db", new() { Condition = "service_healthy" } }
