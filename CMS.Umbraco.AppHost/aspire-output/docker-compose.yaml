@@ -1,0 +1,82 @@
+services:
+  env-dashboard:
+    image: "mcr.microsoft.com/dotnet/nightly/aspire-dashboard:latest"
+    ports:
+      - "18888"
+    expose:
+      - "18889"
+      - "18890"
+    networks:
+      - "aspire"
+    restart: "always"
+  umbraco-db:
+    image: "${UMBRACO_DB_IMAGE}"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${DB_PASSWORD}"
+    ports:
+      - "1433:1433"
+      - "1434:1434"
+    expose:
+      - "1433"
+    volumes:
+      - type: "volume"
+        target: "/var/opt/mssql"
+        source: "umb_database"
+        read_only: false
+    networks:
+      - "aspire"
+    healthcheck:
+      test:
+        - "CMD"
+        - "bash"
+        - "/healthcheck.sh"
+      interval: "5m"
+      timeout: "5s"
+      retries: 3
+      start_period: "30s"
+  umbraco-cms:
+    image: "${UMBRACO_CMS_IMAGE}"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080;https://+:8081"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/aspnetcore.pfx"
+      ASPNETCORE_Kestrel__Certificates__Default__Password: "DevOnlyPassword"
+      ConnectionStrings__umbracoDbDSN: "Server=umbraco-db,1433;User ID=sa;Password=${DB_PASSWORD};TrustServerCertificate=true"
+      ConnectionStrings__umbracoDbDSN_ProviderName: "Microsoft.Data.SqlClient"
+    ports:
+      - "44372:8081"
+    volumes:
+      - type: "bind"
+        target: "/app/wwwroot/media"
+        source: "./CMS.Umbraco/wwwroot/media"
+      - type: "bind"
+        target: "/app/wwwroot/scripts"
+        source: "./CMS.Umbraco/wwwroot/scripts"
+      - type: "bind"
+        target: "/app/wwwroot/css"
+        source: "./CMS.Umbraco/wwwroot/css"
+      - type: "bind"
+        target: "/app/wwwroot/views"
+        source: "./CMS.Umbraco/wwwroot/views"
+      - type: "bind"
+        target: "/app/wwwroot/models"
+        source: "./CMS.Umbraco/wwwroot/models"
+      - type: "volume"
+        target: "/app_data"
+        source: "umb_data"
+      - type: "volume"
+        target: "/logs"
+        source: "umb_logs"
+    depends_on:
+      umbraco-db:
+        condition: "service_healthy"
+    networks:
+      - "aspire"
+networks:
+  aspire:
+    driver: "bridge"
+volumes:
+  umb_database: {}
+  umb_data: {}
+  umb_logs: {}

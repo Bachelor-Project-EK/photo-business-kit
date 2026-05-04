@@ -1,10 +1,6 @@
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-
-
-builder.AddServiceDefaults();
-
 builder.CreateUmbracoBuilder()
     .AddBackOffice()
     .AddWebsite()
@@ -12,10 +8,6 @@ builder.CreateUmbracoBuilder()
     .Build();
 
 WebApplication app = builder.Build();
-
-app.Logger.LogInformation("Env: {env}", app.Environment.EnvironmentName);
-
-app.MapDefaultEndpoints();
 
 
 await app.BootUmbracoAsync();
