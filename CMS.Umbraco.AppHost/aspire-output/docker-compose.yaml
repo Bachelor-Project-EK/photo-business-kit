@@ -72,7 +72,7 @@ services:
         source: "umb_logs"
         read_only: false
       - type: "volume"
-        target: "/app/umbraco/Data"
+        target: "/app/umbraco"
         source: "umb_data"
         read_only: false
     depends_on:
