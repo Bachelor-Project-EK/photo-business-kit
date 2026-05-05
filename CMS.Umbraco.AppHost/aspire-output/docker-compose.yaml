@@ -45,12 +45,36 @@ services:
       ConnectionStrings__umbracoDbDSN: "Server=umbraco-db,1433;User ID=sa;Password=${DB_PASSWORD};TrustServerCertificate=true"
       ConnectionStrings__umbracoDbDSN_ProviderName: "Microsoft.Data.SqlClient"
     ports:
-      - "44372:8081"
+      - "8081"
     volumes:
+      - type: "bind"
+        target: "/app/wwwroot/media"
+        source: "${UMBRACO_CMS_BINDMOUNT_0}"
+        read_only: false
+      - type: "bind"
+        target: "/app/wwwroot/scripts"
+        source: "${UMBRACO_CMS_BINDMOUNT_1}"
+        read_only: false
+      - type: "bind"
+        target: "/app/wwwroot/css"
+        source: "${UMBRACO_CMS_BINDMOUNT_2}"
+        read_only: false
+      - type: "bind"
+        target: "/app/Views"
+        source: "${UMBRACO_CMS_BINDMOUNT_3}"
+        read_only: false
+      - type: "bind"
+        target: "/app/umbraco/models"
+        source: "${UMBRACO_CMS_BINDMOUNT_4}"
+        read_only: false
       - type: "volume"
         target: "/app/umbraco/Logs"
+        source: "umb_logs"
+        read_only: false
       - type: "volume"
         target: "/app/umbraco/Data"
+        source: "umb_data"
+        read_only: false
     depends_on:
       umbraco-db:
         condition: "service_healthy"

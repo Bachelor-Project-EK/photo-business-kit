@@ -34,23 +34,18 @@ builder.AddContainer("umbraco-cms", "umbraco.cms")
     .WithEnvironment("ASPNETCORE_Kestrel__Certificates__Default__Password", "DevOnlyPassword")
     .WithEnvironment("ConnectionStrings__umbracoDbDSN", sql.Resource.ConnectionStringExpression)
     .WithEnvironment("ConnectionStrings__umbracoDbDSN_ProviderName", "Microsoft.Data.SqlClient")
-    .WithBindMount("../../CMS.Umbraco/wwwroot/media", "/app/wwwroot/media")
-    .WithBindMount("../../CMS.Umbraco/wwwroot/scripts", "/app/wwwroot/scripts")
-    .WithBindMount("../../CMS.Umbraco/wwwroot/css", "/app/wwwroot/css")
-    .WithBindMount("../../CMS.Umbraco/Views", "/app/Views")
-    .WithBindMount("../../CMS.Umbraco/umbraco/models", "/app/umbraco/models")
+    .WithBindMount("../CMS.Umbraco/wwwroot/media", "/app/wwwroot/media")
+    .WithBindMount("../CMS.Umbraco/wwwroot/scripts", "/app/wwwroot/scripts")
+    .WithBindMount("../CMS.Umbraco/wwwroot/css", "/app/wwwroot/css")
+    .WithBindMount("../CMS.Umbraco/Views", "/app/Views")
+    .WithBindMount("../CMS.Umbraco/umbraco/models", "/app/umbraco/models")
     .WithVolume("umb_logs", "/app/umbraco/Logs")
     .WithVolume("umb_data", "/app/umbraco/Data")
-    .WithHttpsEndpoint(44372, 8081)
+    .WithHttpsEndpoint(targetPort: 8081)
     .WithExternalHttpEndpoints()
     .WaitFor(sql)
     .PublishAsDockerComposeService((resource, service) =>
     {
-        service.Volumes = new()
-        {
-            new() { Name = "umb_logs", Target = "/app/umbraco/Logs", Type = "volume" } ,
-            new() { Name = "umb_data", Target = "/app/umbraco/Data", Type = "volume" }
-        };
         service.DependsOn = new()
         {
             { "umbraco-db", new() { Condition = "service_healthy" } }
