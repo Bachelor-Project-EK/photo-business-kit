@@ -15,12 +15,7 @@ var sql = builder.AddSqlServer("umbraco-db", password)
     {
         service.Healthcheck = new()
         {
-            Test =
-            [
-                "CMD",
-                "bash",
-                "/healthcheck.sh"
-            ],
+            Test = [ "CMD", "bash", "/healthcheck.sh" ],
             Interval = "5m",
             Timeout = "5s",
             Retries = 3,
@@ -42,18 +37,37 @@ builder.AddContainer("umbraco-cms", "umbraco.cms")
     .WithBindMount("../../CMS.Umbraco/wwwroot/media", "/app/wwwroot/media")
     .WithBindMount("../../CMS.Umbraco/wwwroot/scripts", "/app/wwwroot/scripts")
     .WithBindMount("../../CMS.Umbraco/wwwroot/css", "/app/wwwroot/css")
-    .WithBindMount("../../CMS.Umbraco/Views", "/app/wwwroot/Views")
-    .WithBindMount("../../CMS.Umbraco/umbraco/models", "/app/wwwroot/models")
+    .WithBindMount("../../CMS.Umbraco/Views", "/app/Views")
+    .WithBindMount("../../CMS.Umbraco/umbraco/models", "/app/umbraco/models")
     .WithVolume("umb_logs", "/app/umbraco/Logs")
-    .WithVolume("umb_data", "/app/umbraco")
+    .WithVolume("umb_data", "/app/umbraco/Data")
     .WithHttpsEndpoint(44372, 8081)
     .WithExternalHttpEndpoints()
     .WaitFor(sql)
     .PublishAsDockerComposeService((resource, service) =>
     {
+        service.Volumes = new()
+        {
+            new() { Name = "umb_logs", Target = "/app/umbraco/Logs", Type = "volume" } ,
+            new() { Name = "umb_data", Target = "/app/umbraco/Data", Type = "volume" }
+        };
         service.DependsOn = new()
         {
             { "umbraco-db", new() { Condition = "service_healthy" } }
+        };
+        service.Healthcheck = new()
+        {
+            Test =
+            [
+                "CMD",
+                "curl",
+                "-f",
+                ("https://+8081:/umbraco/api/health/ready")
+            ],
+            Interval = "10s",
+            Timeout = "5s",
+            Retries = 3,
+            StartPeriod = "30s"
         };
     });
 

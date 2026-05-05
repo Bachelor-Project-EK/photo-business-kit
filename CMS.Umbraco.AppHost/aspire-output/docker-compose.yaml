@@ -47,39 +47,25 @@ services:
     ports:
       - "44372:8081"
     volumes:
-      - type: "bind"
-        target: "/app/wwwroot/media"
-        source: "${UMBRACO_CMS_BINDMOUNT_0}"
-        read_only: false
-      - type: "bind"
-        target: "/app/wwwroot/scripts"
-        source: "${UMBRACO_CMS_BINDMOUNT_1}"
-        read_only: false
-      - type: "bind"
-        target: "/app/wwwroot/css"
-        source: "${UMBRACO_CMS_BINDMOUNT_2}"
-        read_only: false
-      - type: "bind"
-        target: "/app/wwwroot/Views"
-        source: "${UMBRACO_CMS_BINDMOUNT_3}"
-        read_only: false
-      - type: "bind"
-        target: "/app/wwwroot/models"
-        source: "${UMBRACO_CMS_BINDMOUNT_4}"
-        read_only: false
       - type: "volume"
         target: "/app/umbraco/Logs"
-        source: "umb_logs"
-        read_only: false
       - type: "volume"
-        target: "/app/umbraco"
-        source: "umb_data"
-        read_only: false
+        target: "/app/umbraco/Data"
     depends_on:
       umbraco-db:
         condition: "service_healthy"
     networks:
       - "aspire"
+    healthcheck:
+      test:
+        - "CMD"
+        - "curl"
+        - "-f"
+        - "https://+8081:/umbraco/api/health/ready"
+      interval: "10s"
+      timeout: "5s"
+      retries: 3
+      start_period: "30s"
 networks:
   aspire:
     driver: "bridge"
