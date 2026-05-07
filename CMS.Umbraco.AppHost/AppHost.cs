@@ -24,6 +24,8 @@ var sql = builder.AddSqlServer("umbraco-db", password)
         service.Ports = ["1433:1433", "1434:1434"];
     });
 
+var db = sql.AddDatabase("UmbracoDb");
+
 builder.AddContainer("umbraco-cms", "umbraco.cms")
     .WithDockerfile(
         contextPath: "..",
@@ -32,7 +34,6 @@ builder.AddContainer("umbraco-cms", "umbraco.cms")
     .WithEnvironment("ASPNETCORE_URLS", "http://+:8080;https://+:8081")
     .WithEnvironment("ASPNETCORE_Kestrel__Certificates__Default__Path", "/https/aspnetcore.pfx")
     .WithEnvironment("ASPNETCORE_Kestrel__Certificates__Default__Password", "DevOnlyPassword")
-    .WithEnvironment("ConnectionStrings__umbracoDbDSN", sql.Resource.ConnectionStringExpression)
     .WithEnvironment("ConnectionStrings__umbracoDbDSN_ProviderName", "Microsoft.Data.SqlClient")
     .WithBindMount("../CMS.Umbraco/wwwroot/media", "/app/wwwroot/media")
     .WithBindMount("../CMS.Umbraco/wwwroot/scripts", "/app/wwwroot/scripts")
@@ -43,7 +44,8 @@ builder.AddContainer("umbraco-cms", "umbraco.cms")
     .WithVolume("umb_data", "/app/umbraco")
     .WithHttpsEndpoint(targetPort: 8081)
     .WithExternalHttpEndpoints()
-    .WaitFor(sql)
+    .WithReference(db, "umbracoDbDSN")
+    .WaitFor(db)
     .PublishAsDockerComposeService((resource, service) =>
     {
         service.DependsOn = new()
