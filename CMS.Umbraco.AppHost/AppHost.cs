@@ -6,7 +6,10 @@ builder.AddDockerComposeEnvironment("env");
 
 var password = builder.AddParameter("db-password", secret: true);
 
-var sql = builder.AddSqlServer("umbraco-db", password)
+var sql = builder.AddSqlServer(
+        name: "umbraco-sql-server",
+        password: password,
+        port: 1433)
     .WithDockerfile(
         contextPath: "../Database")
     .WithDataVolume("umb_database")
@@ -15,21 +18,18 @@ var sql = builder.AddSqlServer("umbraco-db", password)
     {
         service.Healthcheck = new()
         {
-            Test = [ "CMD", "bash", "/healthcheck.sh" ],
+            Test = ["CMD", "bash", "/healthcheck.sh"],
             Interval = "5m",
             Timeout = "5s",
             Retries = 3,
             StartPeriod = "30s"
         };
-        service.Ports = ["1433:1433", "1434:1434"];
+        service.Ports = ["1533:1433"];
     });
 
 var db = sql.AddDatabase("UmbracoDb");
 
-builder.AddContainer("umbraco-cms", "umbraco.cms")
-    .WithDockerfile(
-        contextPath: "..",
-        dockerfilePath: "CMS.Umbraco/Dockerfile")
+builder.AddDockerfile(name: "umbraco-cms", contextPath: "..", dockerfilePath: "CMS.Umbraco/Dockerfile")
     .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
     .WithEnvironment("ASPNETCORE_URLS", "http://+:8080;https://+:8081")
     .WithEnvironment("ASPNETCORE_Kestrel__Certificates__Default__Path", "/https/aspnetcore.pfx")
@@ -40,9 +40,10 @@ builder.AddContainer("umbraco-cms", "umbraco.cms")
     .WithBindMount("../CMS.Umbraco/wwwroot/css", "/app/wwwroot/css")
     .WithBindMount("../CMS.Umbraco/Views", "/app/Views")
     .WithBindMount("../CMS.Umbraco/umbraco/models", "/app/umbraco/models")
+    .WithBindMount("../CMS.Umbraco/uSync", "/app/uSync")
     .WithVolume("umb_logs", "/app/umbraco/Logs")
     .WithVolume("umb_data", "/app/umbraco")
-    .WithHttpsEndpoint(targetPort: 8081)
+    .WithHttpsEndpoint(44353, 8081)
     .WithExternalHttpEndpoints()
     .WithReference(db, "umbracoDbDSN")
     .WaitFor(db)
