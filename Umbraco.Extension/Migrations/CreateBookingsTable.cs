@@ -30,12 +30,13 @@ namespace Umbraco.Extension.Migrations
     [ExplicitColumns]
     public class Bookings
     {
+        [PrimaryKeyColumn(AutoIncrement = false)]
         [Column("Id")]
         public required Guid Id { get; set; }
 
         [Column("CustomerName")]
         [SpecialDbType(SpecialDbTypes.NVARCHARMAX)]
-        public string CustomerName { get; set; } = string.Empty;
+        public required string CustomerName { get; set; }
 
         [Column("BookingDate")]
         public DateTime BookingDate { get; set; }

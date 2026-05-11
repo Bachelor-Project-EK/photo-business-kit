@@ -17,6 +17,7 @@ namespace Umbraco.Extension.Notifications
         private readonly ICoreScopeProvider _coreScopeProvider;
         private readonly IMigrationPlanExecutor _migrationPlanExecutor;
         private readonly IKeyValueService _keyValueService;
+        private readonly IRuntimeState _runtimeState;
 
         public RunBookingsMigration(
             ICoreScopeProvider coreScopeProvider,
@@ -27,10 +28,16 @@ namespace Umbraco.Extension.Notifications
             _coreScopeProvider = coreScopeProvider;
             _migrationPlanExecutor = migrationPlanExecutor;
             _keyValueService = keyValueService;
+            _runtimeState = runtimeState;
         }
 
         public async Task HandleAsync(UmbracoApplicationStartingNotification notification, CancellationToken cancellationToken)
         {
+            if (_runtimeState.Level < RuntimeLevel.Run)
+            {
+                return;
+            }
+
             var upgrader = new Upgrader(new BookingsMigrationPlan());
             await upgrader.ExecuteAsync(_migrationPlanExecutor, _coreScopeProvider, _keyValueService);
         }
