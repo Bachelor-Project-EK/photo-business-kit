@@ -40,6 +40,7 @@ builder.AddDockerfile(name: "umbraco-cms", contextPath: "..", dockerfilePath: "C
     .WithBindMount("../CMS.Umbraco/wwwroot/css", "/app/wwwroot/css")
     .WithBindMount("../CMS.Umbraco/Views", "/app/Views")
     .WithBindMount("../CMS.Umbraco/umbraco/models", "/app/umbraco/models")
+    .WithBindMount("../CMS.Umbraco/uSync", "/app/uSync")
     .WithVolume("umb_logs", "/app/umbraco/Logs")
     .WithVolume("umb_data", "/app/umbraco")
     .WithHttpsEndpoint(44353, 8081)
