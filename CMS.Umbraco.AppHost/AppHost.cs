@@ -6,6 +6,14 @@ builder.AddDockerComposeEnvironment("env");
 
 var password = builder.AddParameter("db-password", secret: true);
 
+var storageBlobContainer = builder.AddAzureStorage("umbraco-blob-storage")
+    .RunAsEmulator(azurite =>
+    {
+        azurite.WithDataVolume();
+    })
+    .AddBlobContainer("umbraco-media");
+
+
 var sql = builder.AddSqlServer(
         name: "umbraco-sql-server",
         password: password,
@@ -43,10 +51,13 @@ builder.AddDockerfile(name: "umbraco-cms", contextPath: "..", dockerfilePath: "C
     .WithBindMount("../CMS.Umbraco/uSync", "/app/uSync")
     .WithVolume("umb_logs", "/app/umbraco/Logs")
     .WithVolume("umb_data", "/app/umbraco")
+    .WithVolume("umb_BlobContainer", "/app/umbraco/BlobContainer")
     .WithHttpsEndpoint(44353, 8081)
     .WithExternalHttpEndpoints()
     .WithReference(db, "umbracoDbDSN")
     .WaitFor(db)
+    .WithReference(storageBlobContainer, "umbracoBlobStorage")
+    .WaitFor(storageBlobContainer)
     .PublishAsDockerComposeService((resource, service) =>
     {
         service.DependsOn = new()
