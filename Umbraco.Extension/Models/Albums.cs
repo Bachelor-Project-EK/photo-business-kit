@@ -13,7 +13,8 @@ public class Albums
      public Guid OrderId { get; set; }
 
     [Column("Name")]
-    [SpecialDbType(SpecialDbTypes.NVARCHARMAX)]
+    // [SpecialDbType(SpecialDbTypes.NVARCHARMAX)]
+    [Length(50)]
     public string Name { get; set; } = string.Empty;
 
     [Column("CreatedOn")]

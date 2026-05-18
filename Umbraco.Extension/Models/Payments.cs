@@ -7,23 +7,23 @@ public class Payments
 {
     [Column("Id")]
     [PrimaryKeyColumn(AutoIncrement = false)]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Column("OrderId")] 
-    public Guid OrderId { get; set; }
+    public required Guid OrderId { get; set; }
 
     [Column("CreatedOn")]
-     public DateTimeOffset CreatedOn { get; set; }
+     public required DateTimeOffset CreatedOn { get; set; }
 
     [Column("UpdatedOn")]
-     public DateTimeOffset UpdatedOn { get; set; }
+     public required DateTimeOffset UpdatedOn { get; set; }
 
     [Column("Paid")] 
-    public bool Paid { get; set; }
+    public required bool Paid { get; set; }
 
     [Column("Status")] 
-    public PaymentStatus Status { get; set; }
+    public required PaymentStatus Status { get; set; }
 
     [Column("TotalPrice")]
-     public decimal TotalPrice { get; set; }
+     public required decimal TotalPrice { get; set; }
 }

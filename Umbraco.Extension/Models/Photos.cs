@@ -9,19 +9,22 @@ public class Photos
 {
     [Column("Id")]
     [PrimaryKeyColumn(AutoIncrement = false)]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
-    [Column("AlbumId")] public Guid AlbumId { get; set; }
+    [Column("AlbumId")]
+     public required Guid AlbumId { get; set; }
 
     [Column("Name")]
     [SpecialDbType(SpecialDbTypes.NVARCHARMAX)]
-    public string Name { get; set; } = string.Empty;
+    public required string Name { get; set; }
 
-    [Column("CreatedOn")] public DateTimeOffset CreatedOn { get; set; }
+    [Column("CreatedOn")]
+     public required DateTimeOffset CreatedOn { get; set; }
 
-    [Column("UpdatedOn")] public DateTimeOffset UpdatedOn { get; set; }
+    [Column("UpdatedOn")]
+     public required DateTimeOffset UpdatedOn { get; set; }
 
     [Column("Link")]
     [SpecialDbType(SpecialDbTypes.NVARCHARMAX)]
-    public string Link { get; set; } = string.Empty;
+    public required string Link { get; set; }
 }

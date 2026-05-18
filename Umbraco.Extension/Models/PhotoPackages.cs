@@ -10,11 +10,14 @@ public class PhotoPackages
 {
     [Column("Id")]
     [PrimaryKeyColumn(AutoIncrement = false)]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
-    [Column("EventTypeId")] public Guid EventTypeId { get; set; }
+    [Column("EventTypeId")]
+     public required Guid EventTypeId { get; set; }
 
-    [Column("Name")] [Length(255)] public string Name { get; set; } = string.Empty;
+    [Column("Name")]
+    [Length(100)] 
+    public required string Name { get; set; }
 
     [Column("PhotoPrice")]
     public decimal? PhotoPrice { get; set; }
@@ -22,5 +25,6 @@ public class PhotoPackages
     [Column("HourlyPrice")]
     public decimal? HourlyPrice { get; set; }
 
-    [Column("PhotoCount")] public int PhotoCount { get; set; }
+    [Column("PhotoCount")] 
+    public required int PhotoCount { get; set; }
 }

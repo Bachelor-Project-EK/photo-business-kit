@@ -11,24 +11,25 @@ public class Bookings
 {
     [Column("Id")]
     [PrimaryKeyColumn(AutoIncrement = false)]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Column("nodeId")]
-    public int NodeId { get; set; }
+    public required int NodeId { get; set; }
 
     [Column("CreatedOn")]
-    public DateTimeOffset CreatedOn { get; set; }
+    public required DateTimeOffset CreatedOn { get; set; }
 
     [Column("UpdatedOn")]
-    public DateTimeOffset UpdatedOn { get; set; }
+    public required DateTimeOffset UpdatedOn { get; set; }
 
     [Column("StartDate")]
-    public DateTimeOffset StartDate { get; set; }
+    public required DateTimeOffset StartDate { get; set; }
 
     [Column("EndDate")]
-    public DateTimeOffset EndDate { get; set; }
+    public required DateTimeOffset EndDate { get; set; }
 
     [Column("Status")]
-    public BookingStatus Status { get; set; }
+    public required BookingStatus Status { get; set; }
+    
 
 }

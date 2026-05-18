@@ -10,9 +10,10 @@ public class EventTypes
 {
     [Column("Id")]
     [PrimaryKeyColumn(AutoIncrement = false)]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
-    [Column("Name")] [Length(255)]
-     public string Name { get; set; } = string.Empty;
+    [Column("Name")]
+    [Length(100)]
+    public required string Name { get; set; } 
 
 }

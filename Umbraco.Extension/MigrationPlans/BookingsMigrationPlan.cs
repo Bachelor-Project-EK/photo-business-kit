@@ -9,11 +9,13 @@ namespace Umbraco.Extension.MigrationPlans
     public class BookingsMigrationPlan : MigrationPlan
     {
         public BookingsMigrationPlan()
-            : base("Bookings")
+            : base("BookingsMigrationPlan")
         {
             // Define the steps for the migration plan
             From(string.Empty)
-                .To<CreateBookingsTable>("Initial-bookings-migration");
+                .To<CreateTables>("Initial migration to create tables");
+            
+            
 
             // You can add more steps here as needed for future migrations
         }

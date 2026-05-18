@@ -7,23 +7,23 @@ namespace Umbraco.Extension.Models;
 [TableName("Orders")]
 [PrimaryKey("Id", AutoIncrement = false)]
 [ExplicitColumns]
-public class Orders : EntityBase
+public class Orders
 {
     [Column("Id")]
     [PrimaryKeyColumn(AutoIncrement = false)]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Column("BookingId")] 
-    public Guid BookingId { get; set; }
+    public required Guid BookingId { get; set; }
 
     [Column("PhotoPackageId")]
-     public Guid PhotoPackageId { get; set; }
+     public required Guid PhotoPackageId { get; set; }
 
     [Column("CreatedOn")] 
-    public DateTimeOffset CreatedOn { get; set; }
+    public required DateTimeOffset CreatedOn { get; set; }
 
     [Column("UpdatedOn")]
-     public DateTimeOffset UpdatedOn { get; set; }
+     public required DateTimeOffset UpdatedOn { get; set; }
 
     [Column("Comment")]
     [SpecialDbType(SpecialDbTypes.NVARCHARMAX)]
