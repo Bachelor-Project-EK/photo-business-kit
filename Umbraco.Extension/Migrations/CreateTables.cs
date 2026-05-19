@@ -5,7 +5,7 @@ namespace Umbraco.Extension.Migrations
 {
     public class CreateTables : AsyncMigrationBase
     {
-        private CreateTables(IMigrationContext context)
+        public CreateTables(IMigrationContext context)
             : base(context)
         {
         }

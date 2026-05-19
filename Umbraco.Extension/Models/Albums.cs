@@ -2,7 +2,9 @@ using NPoco;
 using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 
 namespace Umbraco.Extension.Models;
-
+[TableName("Albums")]
+[PrimaryKey("Id", AutoIncrement = false)]
+[ExplicitColumns]
 public class Albums
 {
     [Column("Id")]
@@ -13,7 +15,6 @@ public class Albums
      public Guid OrderId { get; set; }
 
     [Column("Name")]
-    // [SpecialDbType(SpecialDbTypes.NVARCHARMAX)]
     [Length(50)]
     public string Name { get; set; } = string.Empty;
 

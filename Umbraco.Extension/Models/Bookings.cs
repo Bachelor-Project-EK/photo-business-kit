@@ -29,7 +29,16 @@ public class Bookings
     public required DateTimeOffset EndDate { get; set; }
 
     [Column("Status")]
-    public required BookingStatus Status { get; set; }
-    
+    [Length(50)]
+    public required string StatusValue { get; set; }
 
+    [Ignore]
+    public BookingStatus Status
+    {
+        get => System.Enum.TryParse(StatusValue, out BookingStatus status) &&
+            System.Enum.IsDefined(typeof(BookingStatus), status) ?
+            status :
+            throw new InvalidOperationException($"Invalid booking status value: {StatusValue}");
+        set => StatusValue = value.ToString();
+    }
 }
