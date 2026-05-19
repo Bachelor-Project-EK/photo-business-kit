@@ -24,7 +24,9 @@ public class Payments
     [Column(nameof(Paid))]
     public required bool Paid { get; set; }
 
-    [Column(nameof(TotalPrice))]
+    //[Column(nameof(TotalPrice))]
+    //[SpecialDbType("money")]
+    [Ignore]
     public required decimal TotalPrice { get; set; }
 
     [Column(nameof(PaymentStatus))]

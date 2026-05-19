@@ -19,10 +19,10 @@ public class PhotoPackages
     [Length(100)] 
     public required string Name { get; set; }
 
-    [Column(nameof(PhotoPrice))]
+    [Ignore]
     public decimal? PhotoPrice { get; set; }
+    [Ignore]
 
-    [Column(nameof(HourlyPrice))]
     public decimal? HourlyPrice { get; set; }
 
     [Column(nameof(PhotoCount))] 
