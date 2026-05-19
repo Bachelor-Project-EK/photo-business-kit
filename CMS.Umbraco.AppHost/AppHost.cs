@@ -17,7 +17,7 @@ var storageBlobContainer = builder.AddAzureStorage("umbraco-blob-storage")
 var sql = builder.AddSqlServer(
         name: "umbraco-sql-server",
         password: password,
-        port: 1433)
+        port: 1533)
     .WithDockerfile(
         contextPath: "../Database")
     .WithDataVolume("umb_database")

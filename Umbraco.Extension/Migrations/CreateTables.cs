@@ -12,34 +12,41 @@ namespace Umbraco.Extension.Migrations
 
         protected override Task MigrateAsync()
         {
-            if (!TableExists("Albums"))
-            {
-                Create.Table<Albums>().Do();
-            }
-
-            if (!TableExists("Bookings"))
-            {
-                Create.Table<Bookings>().Do();
-            }
-
-            if (!TableExists("EventTypes"))
+            if (!TableExists(nameof(EventTypes)))
             {
                 Create.Table<EventTypes>().Do();
             }
 
-            if (!TableExists("Orders"))
-            {
-                Create.Table<Orders>().Do();
-            }
-            if (!TableExists("Payments"))
-            {
-                Create.Table<Payments>().Do();
-            }
-            if (!TableExists("PhotoPackages"))
+            if (!TableExists(nameof(PhotoPackages)))
             {
                 Create.Table<PhotoPackages>().Do();
             }
-            if (!TableExists("Photos"))
+
+            if (!TableExists(nameof(Bookings)))
+            {
+                Create.Table<Bookings>().Do();
+                Create.ForeignKey("FK_Bookings_cmsMember_nodeId")
+                    .FromTable(nameof(Bookings))
+                    .ForeignColumn(nameof(Bookings.NodeId))
+                    .ToTable("cmsMember").PrimaryColumns("nodeId").Do();
+            }
+
+            if (!TableExists(nameof(Orders)))
+            {
+                Create.Table<Orders>().Do();
+            }
+
+            if (!TableExists(nameof(Albums)))
+            {
+                Create.Table<Albums>().Do();
+            }
+
+            if (!TableExists(nameof(Payments)))
+            {
+                Create.Table<Payments>().Do();
+            }
+
+            if (!TableExists(nameof(Photos)))
             {
                 Create.Table<Photos>().Do();
             }
@@ -48,3 +55,4 @@ namespace Umbraco.Extension.Migrations
         }
     }
 }
+

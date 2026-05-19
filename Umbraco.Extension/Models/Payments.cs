@@ -3,31 +3,31 @@ using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 using Umbraco.Extension.Enum;
 namespace Umbraco.Extension.Models;
 
-[TableName("Payments")]
-[PrimaryKey("Id", AutoIncrement = false)]
+[TableName(nameof(Payments))]
+[PrimaryKey(nameof(Id), AutoIncrement = false)]
 [ExplicitColumns]
 public class Payments
 {
-    [Column("Id")]
+    [Column(nameof(Id))]
     [PrimaryKeyColumn(AutoIncrement = false)]
     public required Guid Id { get; set; }
 
-    [Column("OrderId")]
+    [Column(nameof(OrderId))]
     public required Guid OrderId { get; set; }
 
-    [Column("CreatedOn")]
+    [Column(nameof(CreatedOn))]
     public required DateTimeOffset CreatedOn { get; set; }
 
-    [Column("UpdatedOn")]
+    [Column(nameof(UpdatedOn))]
     public required DateTimeOffset UpdatedOn { get; set; }
 
-    [Column("Paid")]
+    [Column(nameof(Paid))]
     public required bool Paid { get; set; }
 
-    [Column("TotalPrice")]
+    [Column(nameof(TotalPrice))]
     public required decimal TotalPrice { get; set; }
 
-    [Column("Status")]
+    [Column(nameof(PaymentStatus))]
     [Length(50)]
     public required string PaymentStatus { get; set; }
 

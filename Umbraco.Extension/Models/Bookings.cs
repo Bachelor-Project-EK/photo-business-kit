@@ -1,34 +1,37 @@
 using NPoco;
+using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 using Umbraco.Extension.Enum;
 
+
 namespace Umbraco.Extension.Models;
 
-[TableName("Bookings")]
-[PrimaryKey("Id", AutoIncrement = false)]
+[TableName(nameof(Bookings))]
+[PrimaryKey(nameof(Id), AutoIncrement = false)]
 [ExplicitColumns]
 public class Bookings
 {
-    [Column("Id")]
+    [Column(nameof(Id))]
     [PrimaryKeyColumn(AutoIncrement = false)]
     public required Guid Id { get; set; }
 
-    [Column("nodeId")]
+    [Column(nameof(NodeId))]
     public required int NodeId { get; set; }
 
-    [Column("CreatedOn")]
+    [Column(nameof(CreatedOn))]
     public required DateTimeOffset CreatedOn { get; set; }
 
-    [Column("UpdatedOn")]
+    [Column(nameof(UpdatedOn))]
     public required DateTimeOffset UpdatedOn { get; set; }
 
-    [Column("StartDate")]
+    [Column(nameof(StartDate))]
     public required DateTimeOffset StartDate { get; set; }
 
-    [Column("EndDate")]
+    [Column(nameof(EndDate))]
     public required DateTimeOffset EndDate { get; set; }
 
-    [Column("Status")]
+    [Column(nameof(StatusValue))]
     [Length(50)]
     public required string StatusValue { get; set; }
 

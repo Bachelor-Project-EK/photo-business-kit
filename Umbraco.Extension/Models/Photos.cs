@@ -2,29 +2,35 @@ using NPoco;
 using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 
 namespace Umbraco.Extension.Models;
-[TableName("Photos")]
-[PrimaryKey("Id", AutoIncrement = false)]
+[TableName(nameof(Photos))]
+[PrimaryKey(nameof(Id), AutoIncrement = false)]
 [ExplicitColumns]
 public class Photos
 {
-    [Column("Id")]
+    [Column(nameof(Id))]
     [PrimaryKeyColumn(AutoIncrement = false)]
     public required Guid Id { get; set; }
 
-    [Column("AlbumId")]
+    [Column(nameof(AlbumId))]
+    [ForeignKey(typeof(Albums), Column = nameof(Albums.Id))]
      public required Guid AlbumId { get; set; }
 
-    [Column("Name")]
+    [ResultColumn]
+    [Reference(ReferenceType.OneToOne, ColumnName = nameof(AlbumId), ReferenceMemberName = nameof(Albums.Id))]
+    public Albums? Album { get; set; }
+
+    [Column(nameof(Name))]
     [SpecialDbType(SpecialDbTypes.NVARCHARMAX)]
     public required string Name { get; set; }
 
-    [Column("CreatedOn")]
+    [Column(nameof(CreatedOn))]
      public required DateTimeOffset CreatedOn { get; set; }
 
-    [Column("UpdatedOn")]
+    [Column(nameof(UpdatedOn))]
      public required DateTimeOffset UpdatedOn { get; set; }
 
-    [Column("Link")]
+    [Column(nameof(Link))]
     [SpecialDbType(SpecialDbTypes.NVARCHARMAX)]
     public required string Link { get; set; }
+
 }
