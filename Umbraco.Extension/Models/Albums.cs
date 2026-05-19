@@ -29,6 +29,7 @@ public class Albums
     [Column(nameof(UpdatedOn))] 
     public DateTimeOffset UpdatedOn { get; set; }
 
-    [Ignore]
-    public ICollection<Photos?> Photos { get; set; } = new List<Photos?>();
+    [ResultColumn]
+    [Reference(ReferenceType.Many, ColumnName = nameof(Id), ReferenceMemberName = nameof(Id))]
+    public ICollection<Photos?> ListOfPhoto { get; set; } = new List<Photos?>();
 }
