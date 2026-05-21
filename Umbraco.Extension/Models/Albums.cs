@@ -2,6 +2,7 @@ using NPoco;
 using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 
 namespace Umbraco.Extension.Models;
+
 [TableName(nameof(Albums))]
 [PrimaryKey(nameof(Id), AutoIncrement = false)]
 [ExplicitColumns]
@@ -24,12 +25,12 @@ public class Albums
     public string Name { get; set; } = string.Empty;
 
     [Column(nameof(CreatedOn))]
-     public DateTimeOffset CreatedOn { get; set; }
+    public DateTimeOffset CreatedOn { get; set; }
 
-    [Column(nameof(UpdatedOn))] 
+    [Column(nameof(UpdatedOn))]
     public DateTimeOffset UpdatedOn { get; set; }
 
     [ResultColumn]
-    [Reference(ReferenceType.Many, ColumnName = nameof(Id), ReferenceMemberName = nameof(Photos.AlbumId))]
-    public ICollection<Photos?> ListOfPhoto { get; set; } = new List<Photos?>();
+    [Reference(ReferenceType.Many, ColumnName = nameof(Id), ReferenceMemberName = nameof(Models.Photos.AlbumId))]
+    public ICollection<Photos>? Photos { get; set; }
 }

@@ -13,17 +13,16 @@ public class PhotoPackages
     public required Guid Id { get; set; }
 
     [Column(nameof(EventTypeId))]
+    [ForeignKey(typeof(EventTypes), Column = nameof(EventTypeId))]
      public required Guid EventTypeId { get; set; }
+
+    [ResultColumn]
+    [Reference(ReferenceType.OneToOne, ColumnName = nameof(EventTypeId), ReferenceMemberName = nameof(EventTypes.Id))]
+    public EventTypes? EventType { get; set; }
 
     [Column(nameof(Name))]
     [Length(100)] 
     public required string Name { get; set; }
-
-    [Ignore]
-    public decimal? PhotoPrice { get; set; }
-    [Ignore]
-
-    public decimal? HourlyPrice { get; set; }
 
     [Column(nameof(PhotoCount))] 
     public required int PhotoCount { get; set; }
