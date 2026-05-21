@@ -11,12 +11,12 @@ public class Albums
     [PrimaryKeyColumn(AutoIncrement = false)]
     public Guid Id { get; set; }
 
-    [Column(nameof(BookingsId))]
+    [Column(nameof(BookingId))]
     [ForeignKey(typeof(Bookings), Column = nameof(Bookings.Id))]
-    public Guid BookingsId { get; set; }
+    public Guid BookingId { get; set; }
 
     [ResultColumn]
-    [Reference(ReferenceType.OneToOne, ColumnName = nameof(BookingsId), ReferenceMemberName = nameof(Bookings.Id))]
+    [Reference(ReferenceType.OneToOne, ColumnName = nameof(BookingId), ReferenceMemberName = nameof(Bookings.Id))]
     public Bookings? Booking { get; set; }
 
     [Column(nameof(Name))]
