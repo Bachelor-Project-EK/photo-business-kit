@@ -13,7 +13,7 @@ public class PhotoPackages
     public required Guid Id { get; set; }
 
     [Column(nameof(EventTypeId))]
-    [ForeignKey(typeof(EventTypes), Column = nameof(EventTypeId))]
+    [ForeignKey(typeof(EventTypes), Column = nameof(EventTypes.Id))]
      public required Guid EventTypeId { get; set; }
 
     [ResultColumn]
