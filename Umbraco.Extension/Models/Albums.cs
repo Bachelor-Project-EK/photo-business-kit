@@ -30,6 +30,6 @@ public class Albums
     public DateTimeOffset UpdatedOn { get; set; }
 
     [ResultColumn]
-    [Reference(ReferenceType.Many, ColumnName = nameof(Id), ReferenceMemberName = nameof(Id))]
+    [Reference(ReferenceType.Many, ColumnName = nameof(Id), ReferenceMemberName = nameof(Photos.AlbumId))]
     public ICollection<Photos?> ListOfPhoto { get; set; } = new List<Photos?>();
 }
