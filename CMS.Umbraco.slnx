@@ -12,5 +12,6 @@
   <Project Path="CMS.Umbraco.AppHost/CMS.Umbraco.AppHost.csproj" Id="6aa40201-94b9-46ff-a000-f2ca44a537f1" />
   <Project Path="CMS.Umbraco.ServiceDefaults/CMS.Umbraco.ServiceDefaults.csproj" />
   <Project Path="CMS.Umbraco/CMS.Umbraco.csproj" />
+  <Project Path="Umbraco.Extension.Test/Umbraco.Extension.Test.csproj" Id="7f4994b9-364d-4c80-84b9-4c574479133f" />
   <Project Path="Umbraco.Extension/Umbraco.Extension.csproj" Id="a414fcc3-09fd-4904-9456-589f69d5c7cb" />
 </Solution>
