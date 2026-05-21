@@ -33,11 +33,6 @@ namespace Umbraco.Extension.Migrations
                     .ToTable("cmsMember").PrimaryColumns("nodeId").Do();
             }
 
-            if (!TableExists(nameof(Orders)))
-            {
-                Create.Table<Orders>().Do();
-            }
-
             if (!TableExists(nameof(Albums)))
             {
                 Create.Table<Albums>().Do();

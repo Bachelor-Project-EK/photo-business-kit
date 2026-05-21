@@ -44,4 +44,16 @@ public class Bookings
             throw new InvalidOperationException($"Invalid booking status value: {StatusValue}");
         set => StatusValue = value.ToString();
     }
+
+    [Column(nameof(Comment))]
+    [SpecialDbType(SpecialDbTypes.NVARCHARMAX)]
+    public string? Comment { get; set; }
+
+    [Column(nameof(PhotoPackageId))]
+    [ForeignKey(typeof(PhotoPackages), Column = nameof(PhotoPackages.Id))]
+    public required Guid PhotoPackageId { get; set; }
+
+    [ResultColumn]
+    [Reference(ReferenceType.OneToOne, ColumnName = nameof(PhotoPackageId), ReferenceMemberName = nameof(PhotoPackages.Id))]
+    public PhotoPackages? PhotoPackage { get; set; }
 }
