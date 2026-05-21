@@ -2,37 +2,25 @@ using Microsoft.Extensions.DependencyInjection;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddDockerComposeEnvironment("env");
-
 var password = builder.AddParameter("db-password", secret: true);
 
-var storageBlobContainer = builder.AddAzureStorage("umbraco-blob-storage")
+builder.AddDockerComposeEnvironment("env");
+
+var storage = builder.AddAzureStorage("umbraco-blob-storage")
     .RunAsEmulator(azurite =>
     {
-        azurite.WithDataVolume();
+        azurite.WithDataVolume("umb_storage");
     })
-    .AddBlobContainer("umbraco-media");
+    .AddBlobs("umbraco-media");
 
-
-var sql = builder.AddSqlServer(
-        name: "umbraco-sql-server",
-        password: password,
-        port: 1533)
-    .WithDockerfile(
-        contextPath: "../Database")
-    .WithDataVolume("umb_database")
-    .WithEnvironment("MSSQL_SA_PASSWORD", password)
-    .PublishAsDockerComposeService((resource, service) =>
+var sql = builder.AddAzureSqlServer("umbraco-sql-server")
+    .RunAsContainer(options =>
     {
-        service.Healthcheck = new()
-        {
-            Test = ["CMD", "bash", "/healthcheck.sh"],
-            Interval = "5m",
-            Timeout = "5s",
-            Retries = 3,
-            StartPeriod = "30s"
-        };
-        service.Ports = ["1533:1433"];
+        options.WithHostPort(1533);
+        options.WithPassword(password);
+        options.WithDockerfile("../Database");
+        options.WithDataVolume("umb_database");
+        options.WithEnvironment("MSSQL_SA_PASSWORD", password);
     });
 
 var db = sql.AddDatabase("UmbracoDb");
@@ -55,8 +43,8 @@ builder.AddDockerfile(name: "umbraco-cms", contextPath: "..", dockerfilePath: "C
     .WithExternalHttpEndpoints()
     .WithReference(db, "umbracoDbDSN")
     .WaitFor(db)
-    .WithReference(storageBlobContainer, "umbracoBlobStorage")
-    .WaitFor(storageBlobContainer)
+    .WithReference(storage, "umbracoBlobStorage")
+    .WaitFor(storage)
     .PublishAsDockerComposeService((resource, service) =>
     {
         service.DependsOn = new()
