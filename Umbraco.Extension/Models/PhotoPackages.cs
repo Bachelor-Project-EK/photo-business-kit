@@ -23,6 +23,12 @@ public class PhotoPackages
     [Column(nameof(Name))]
     [Length(100)] 
     public required string Name { get; set; }
+    
+    [Column(nameof(PhotoPrice))]
+    public decimal? PhotoPrice { get; set; }
+
+    [Column(nameof(HourlyPrice))]
+    public decimal? HourlyPrice { get; set; }
 
     [Column(nameof(PhotoCount))] 
     public required int PhotoCount { get; set; }

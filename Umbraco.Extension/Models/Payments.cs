@@ -28,6 +28,9 @@ public class Payments
     [Length(50)]
     public required string PaymentStatus { get; set; }
 
+    [Column(nameof(TotalPrice))]
+    public required decimal TotalPrice { get; set; }
+
     [Ignore]
     public PaymentStatus Status
     {
