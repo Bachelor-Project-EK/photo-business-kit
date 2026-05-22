@@ -20,8 +20,18 @@ namespace Umbraco.Extension.Migrations
             if (!TableExists(nameof(PhotoPackages)))
             {
                 Create.Table<PhotoPackages>().Do();
-                Create.Column("PhotoPrice").OnTable(nameof(PhotoPackages)).AsCustom("money").Do();
-                Create.Column("HourlyPrice").OnTable(nameof(PhotoPackages)).AsCustom("money").Do();
+
+                Alter.Table(nameof(PhotoPackages))
+                    .AlterColumn(nameof(PhotoPackages.PhotoPrice))
+                    .AsCustom("MONEY")
+                    .Nullable()
+                    .Do();
+
+                Alter.Table(nameof(PhotoPackages))
+                    .AlterColumn(nameof(PhotoPackages.HourlyPrice))
+                    .AsCustom("MONEY")
+                    .Nullable()
+                    .Do();
             }
 
             if (!TableExists(nameof(Bookings)))
@@ -41,7 +51,10 @@ namespace Umbraco.Extension.Migrations
             if (!TableExists(nameof(Payments)))
             {
                 Create.Table<Payments>().Do();
-                Create.Column("TotalPrice").OnTable(nameof(Payments)).AsCustom("money").Do();
+                Alter.Table(nameof(Payments))
+                    .AlterColumn(nameof(Payments.TotalPrice))
+                    .AsCustom("MONEY")
+                    .Do();
             }
 
             if (!TableExists(nameof(Photos)))
