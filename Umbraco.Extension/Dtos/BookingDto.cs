@@ -10,15 +10,9 @@ namespace Umbraco.Extension.Dtos
 {
     public class BookingDto
     {
-        public required DateTimeOffset CreatedOn { get; set; }
-
-        public required DateTimeOffset UpdatedOn { get; set; }
-
         public required DateTimeOffset StartDate { get; set; }
 
         public required DateTimeOffset EndDate { get; set; }
-
-        public required BookingStatus Status { get; set; }
 
         public string? Comment { get; set; }
 

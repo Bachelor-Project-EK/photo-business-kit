@@ -1,5 +1,6 @@
 ﻿namespace Umbraco.Extension.Test
 {
+    [TestFixture]
     public class Tests
     {
         [SetUp]
