@@ -25,12 +25,15 @@ var sql = builder.AddAzureSqlServer("umbraco-sql-server")
 
 var db = sql.AddDatabase("UmbracoDb");
 
+var cmsPort = 44353;
+
 builder.AddDockerfile(name: "umbraco-cms", contextPath: "..", dockerfilePath: "CMS.Umbraco/Dockerfile")
     .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
-    .WithEnvironment("ASPNETCORE_URLS", "http://+:8080;https://+:8081")
+    .WithEnvironment("ASPNETCORE_URLS", "http://+:8080/;https://+:8081/")
     .WithEnvironment("ASPNETCORE_Kestrel__Certificates__Default__Path", "/https/aspnetcore.pfx")
     .WithEnvironment("ASPNETCORE_Kestrel__Certificates__Default__Password", "DevOnlyPassword")
     .WithEnvironment("ConnectionStrings__umbracoDbDSN_ProviderName", "Microsoft.Data.SqlClient")
+    .WithEnvironment("Umbraco__CMS__Webrouting__UmbracoApplicationUrl", $"https://localhost:{cmsPort.ToString()}/")
     .WithBindMount("../CMS.Umbraco/wwwroot/media", "/app/wwwroot/media")
     .WithBindMount("../CMS.Umbraco/wwwroot/scripts", "/app/wwwroot/scripts")
     .WithBindMount("../CMS.Umbraco/wwwroot/css", "/app/wwwroot/css")
@@ -39,7 +42,7 @@ builder.AddDockerfile(name: "umbraco-cms", contextPath: "..", dockerfilePath: "C
     .WithBindMount("../CMS.Umbraco/uSync", "/app/uSync")
     .WithVolume("umb_logs", "/app/umbraco/Logs")
     .WithVolume("umb_data", "/app/umbraco")
-    .WithHttpsEndpoint(44353, 8081)
+    .WithHttpsEndpoint(cmsPort, 8081)
     .WithExternalHttpEndpoints()
     .WithReference(db, "umbracoDbDSN")
     .WaitFor(db)
