@@ -8,12 +8,16 @@ using Umbraco.Extension.Validators;
 
 namespace Umbraco.Extension.Composers;
 
-public class EventTypeComposer : IComposer
+public class CmsComposer : IComposer
 {
     //Composer
     public void Compose(IUmbracoBuilder builder)
     {
         builder.Services.AddScoped<EventTypeService>();
-        builder.Services.AddScoped<IValidator<EventTypeCommandDto>, EventTypeDtoValidator>();
+        builder.Services.AddScoped<PaymentService>();
+        builder.Services.AddScoped<PhotoPackageService>();
+        builder.Services.AddScoped<IValidator, EventTypeDtoValidator>();
+        builder.Services.AddScoped<IValidator<PaymentCommandDto>, PaymentDtoValidator>();
+        builder.Services.AddScoped<IValidator<PhotoPackageCommandDto>, PhotoPackageDtoValidator>();
     }
 }

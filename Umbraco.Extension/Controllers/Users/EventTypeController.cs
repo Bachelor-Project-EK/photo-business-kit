@@ -48,4 +48,42 @@ public class EventTypeController : UmbracoExtensionApiControllerBase
 
         return Created(string.Empty, createdEventType);
     }
+
+    [HttpPut("eventtypes/{id:guid}")]
+    [ProducesResponseType(typeof(EventTypeCommandDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Update([FromBody] EventTypeCommandDto dto, [FromRoute] Guid id)
+    {
+        var validationResult = await _validator.ValidateAsync(dto);
+        
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+
+        var updatedEventType = await _eventTypeService.UpdateAsync(dto, id);
+
+        if (updatedEventType is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(updatedEventType);
+    }
+
+    [HttpDelete("eventtypes/{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    {
+        var deleted = await _eventTypeService.DeleteAsync(id);
+
+        if (!deleted)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
 }
