@@ -1,31 +1,30 @@
 using Asp.Versioning;
 using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Umbraco.Extension.Dtos;
+using Umbraco.Extension.Dtos.Commands;
+using Umbraco.Extension.Dtos.Queries;
 using Umbraco.Extension.Services;
 
-namespace Umbraco.Extension.Controllers;
+namespace Umbraco.Extension.Controllers.Users;
 
 [ApiVersion("1.0")]
 [ApiExplorerSettings(GroupName = Constants.ApiName)]
 public class EventTypeController : UmbracoExtensionApiControllerBase
 {
     private readonly EventTypeService _eventTypeService;
-    private readonly IValidator<EventTypeDto> _validator;
+    private readonly IValidator<EventTypeCommandDto> _validator;
 
     public EventTypeController(
         EventTypeService eventTypeService,
-        IValidator<EventTypeDto> validator)
+        IValidator<EventTypeCommandDto> validator)
     {
         _eventTypeService = eventTypeService;
         _validator = validator;
     }
-
-    [AllowAnonymous]
+ 
     [HttpGet("eventtypes")]
-    [ProducesResponseType(typeof(IEnumerable<EventTypeDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<EventTypeQueryDto>), StatusCodes.Status200OK)]
     public IActionResult GetAll()
     {
         var eventTypes = _eventTypeService.GetAll();
@@ -33,11 +32,10 @@ public class EventTypeController : UmbracoExtensionApiControllerBase
         return Ok(eventTypes);
     }
 
-    [AllowAnonymous]
     [HttpPost("eventtypes")]
-    [ProducesResponseType(typeof(EventTypeDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(EventTypeCommandDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create(EventTypeDto dto)
+    public async Task<IActionResult> Create(EventTypeCommandDto dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
 

@@ -1,4 +1,5 @@
-using Umbraco.Extension.Dtos;
+using Umbraco.Extension.Dtos.Queries;
+using Umbraco.Extension.Dtos.Commands;
 using Umbraco.Extension.Models;
 using Umbraco.Cms.Infrastructure.Persistence;
 
@@ -13,9 +14,9 @@ public class EventTypeService
         _databaseFactory = databaseFactory;
     }
 
-    public async Task<EventTypeDto> CreateAsync(EventTypeDto dto)
+    public async Task<EventTypeCommandDto> CreateAsync(EventTypeCommandDto dto)
     {
-        var eventType = new EventTypes
+        var eventType = new EventTypes()
         {
             Id = Guid.NewGuid(),
             Name = dto.EventTypeName
@@ -25,19 +26,20 @@ public class EventTypeService
 
         await database.InsertAsync(eventType);
 
-        return new EventTypeDto
+        return new EventTypeCommandDto()
         {
             EventTypeName = eventType.Name
         };
     }
 
-    public IEnumerable<EventTypeDto> GetAll()
+    public IEnumerable<EventTypeQueryDto> GetAll()
     {
         using var database = _databaseFactory.CreateDatabase();
 
         return database.Fetch<EventTypes>()
-            .Select(eventType => new EventTypeDto
+            .Select(eventType => new EventTypeQueryDto
             {
+                Id = eventType.Id,
                 EventTypeName = eventType.Name
             })
             .ToList();

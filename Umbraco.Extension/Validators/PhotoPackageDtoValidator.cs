@@ -1,9 +1,9 @@
 using FluentValidation;
-using Umbraco.Extension.Dtos;
+using Umbraco.Extension.Dtos.Commands;
 
 namespace Umbraco.Extension.Validators;
 
-public class PhotoPackageDtoValidator : AbstractValidator<PhotoPackageDto>
+public class PhotoPackageDtoValidator : AbstractValidator<PhotoPackageCommandDto>
 {
     public PhotoPackageDtoValidator()
     {

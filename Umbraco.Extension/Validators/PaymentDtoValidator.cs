@@ -1,9 +1,9 @@
 using FluentValidation;
-using Umbraco.Extension.Dtos;
+using Umbraco.Extension.Dtos.Commands;
 
 namespace Umbraco.Extension.Validators;
 
-public class PaymentDtoValidator : AbstractValidator<PaymentDto>
+public class PaymentDtoValidator : AbstractValidator<PaymentCommandDto>
 {
     public PaymentDtoValidator()
     {

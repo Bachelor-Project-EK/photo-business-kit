@@ -1,6 +1,6 @@
-namespace Umbraco.Extension.Dtos;
+namespace Umbraco.Extension.Dtos.Commands;
 
-public class PhotoPackageDto
+public class PhotoPackageCommandDto
 {
     public Guid EventTypeId { get; set; }
     public string PhotoPackageName { get; set; }
