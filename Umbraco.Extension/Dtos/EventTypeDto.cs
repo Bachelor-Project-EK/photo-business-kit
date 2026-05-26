@@ -4,5 +4,5 @@ namespace Umbraco.Extension.Dtos;
 
 public class EventTypeDto
 {
-    public string EventTypeName { get; set; }
+    public required string EventTypeName { get; set; }
 }
