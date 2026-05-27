@@ -15,14 +15,22 @@ namespace Umbraco.Extension.Validators
                 .WithMessage("Start date is required.")
                 .LessThan(x => x.EndDate)
                 .WithMessage("Start date must be before end date.");
+
             RuleFor(x => x.EndDate)
                 .NotNull()
                 .WithMessage("End date is required.")
                 .GreaterThan(x => x.StartDate)
                 .WithMessage("End date must be after start date.");
+
             RuleFor(x => x.Comment)
                 .MaximumLength(500)
-                .WithMessage("Comment cannot exceed 500 characters.");
+                .WithMessage("Comment cannot exceed 500 characters.")
+                .Matches(@"^[\p{L}\p{N} _'&().,\-]+$")
+                .WithMessage("Name may only contain letters, numbers, spaces and the characters - _ ' & ( ) . ,");
+
+            RuleFor(x => x.PhotoPackageId)
+                .NotEmpty()
+                .WithMessage("Photo package ID is required.");
         }
     }
 }

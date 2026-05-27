@@ -16,6 +16,6 @@ namespace Umbraco.Extension.Dtos
 
         public string? Comment { get; set; }
 
-        //public PhotoPackages? PhotoPackage { get; set; }
+        public required Guid PhotoPackageId { get; set; }
     }
 }
