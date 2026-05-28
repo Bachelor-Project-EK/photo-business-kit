@@ -17,7 +17,7 @@ public class CmsComposer : IComposer
         builder.Services.AddScoped<EventTypeService>();
         builder.Services.AddScoped<PaymentService>();
         builder.Services.AddScoped<PhotoPackageService>();
-        builder.Services.AddScoped<IValidator, EventTypeDtoValidator>();
+        builder.Services.AddScoped<IValidator<EventTypeCommandDto>, EventTypeDtoValidator>();
         builder.Services.AddScoped<IValidator<PaymentCommandDto>, PaymentDtoValidator>();
         builder.Services.AddScoped<IValidator<PhotoPackageCommandDto>, PhotoPackageDtoValidator>();
 
