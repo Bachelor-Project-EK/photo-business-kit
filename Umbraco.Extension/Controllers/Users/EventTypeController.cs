@@ -9,7 +9,7 @@ using Umbraco.Extension.Services;
 namespace Umbraco.Extension.Controllers.Users;
 
 [ApiVersion("1.0")]
-[ApiExplorerSettings(GroupName = Constants.ApiName)]
+[ApiExplorerSettings(GroupName = "EventTypes")]
 public class EventTypeController : UmbracoExtensionApiControllerBase
 {
     private readonly EventTypeService _eventTypeService;
