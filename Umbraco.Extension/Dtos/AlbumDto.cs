@@ -6,5 +6,5 @@ public class AlbumDto
     public required string Name { get; set; }
     public  DateTimeOffset CreatedOn { get; set; }
     public  DateTimeOffset UpdatedOn { get; set; }
-    public ICollection<PhotoPackageDto>? Photos { get; set; }
+    //public ICollection<PhotoPackageQueryDtoDto>? Photos { get; set; }
 }
