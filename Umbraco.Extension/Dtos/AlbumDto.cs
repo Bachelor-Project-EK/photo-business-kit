@@ -1,3 +1,5 @@
+using Umbraco.Extension.Dtos.Queries;
+
 namespace Umbraco.Extension.Dtos;
 
 public class AlbumDto
@@ -6,5 +8,5 @@ public class AlbumDto
     public required string Name { get; set; }
     public  DateTimeOffset CreatedOn { get; set; }
     public  DateTimeOffset UpdatedOn { get; set; }
-    //public ICollection<PhotoPackageQueryDtoDto>? Photos { get; set; }
+    public ICollection<PhotoPackageQueryDto>? Photos { get; set; }
 }
