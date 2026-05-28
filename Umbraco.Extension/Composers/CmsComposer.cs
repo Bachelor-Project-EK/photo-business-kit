@@ -25,5 +25,8 @@ public class CmsComposer : IComposer
         builder.Services.AddScoped<IPhotoStorageService, AzureBlobPhotoStorageService>();
         builder.Services.AddScoped<IValidator<PhotoDto>, PhotoDtoValidator>();
 
+        builder.AddAzureBlobMediaFileSystem();
+        builder.AddAzureBlobImageSharpCache();
+
     }
 }

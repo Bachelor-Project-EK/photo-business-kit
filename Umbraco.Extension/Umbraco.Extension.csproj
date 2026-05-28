@@ -26,6 +26,8 @@
     <PackageReference Include="Umbraco.Cms.Api.Management" />
     <PackageReference Include="Umbraco.Cms.Web.Common" />
     <PackageReference Include="Umbraco.Cms.Web.Website" />
+    <PackageReference Include="Umbraco.StorageProviders.AzureBlob" />
+    <PackageReference Include="Umbraco.StorageProviders.AzureBlob.ImageSharp" />
   </ItemGroup>
 
 
