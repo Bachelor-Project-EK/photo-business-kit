@@ -10,6 +10,9 @@ namespace CMS.Umbraco.Extensions
     {
         public static IUmbracoBuilder AddOpenIdExternalMemberLogin(this IUmbracoBuilder builder)
         {
+            var config = builder.Config;
+            var env = builder.Services.BuildServiceProvider().GetRequiredService<IWebHostEnvironment>();
+
             builder.Services.ConfigureOptions<OpenIdExternalMemberLoginProviderOptions>();
 
             builder.AddMemberExternalLogins(logins =>
@@ -21,14 +24,16 @@ namespace CMS.Umbraco.Extensions
                             memberAuthenticationBuilder.SchemeForMembers(OpenIdExternalMemberLoginProviderOptions.Scheme),
                             options =>
                             {
-                                var config = builder.Config;
                                 options.ResponseType = "code";
                                 options.Scope.Add("openid");
                                 options.Scope.Add("profile");
                                 options.Scope.Add("email");
                                 options.Scope.Add("phone");
                                 options.Scope.Add("address");
-                                options.RequireHttpsMetadata = true;
+                                if (env.IsDevelopment())
+                                {
+                                    options.RequireHttpsMetadata = false;
+                                }
                                 options.MetadataAddress = config["OpenIdConnect:MetadataAddress"];
                                 options.ClientId = config["OpenIdConnect:ClientId"];
                                 options.ClientSecret = config["OpenIdConnect:ClientSecret"];
