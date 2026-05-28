@@ -14,6 +14,9 @@ var storage = builder.AddAzureStorage("umbraco-blob-storage")
     .RunAsEmulator(azurite =>
     {
         azurite.WithDataVolume("umb_storage");
+        azurite.WithBlobPort(27000)
+            .WithQueuePort(27001)
+            .WithTablePort(27002);
     })
     .AddBlobs("umbraco-media");
 

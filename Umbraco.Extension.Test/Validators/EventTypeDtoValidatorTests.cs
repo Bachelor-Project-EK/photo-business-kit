@@ -1,5 +1,5 @@
 ﻿using FluentValidation.TestHelper;
-using Umbraco.Extension.Dtos;
+using Umbraco.Extension.Dtos.Commands;
 using Umbraco.Extension.Validators;
 
 namespace Umbraco.Extension.Test.Validators;
@@ -18,7 +18,7 @@ public class EventTypeDtoValidatorTests
     public void EventTypeDto_should_have_validation_errors()
     {
         // Arrange
-        var dto = new EventTypeDto
+        var dto = new EventTypeCommandDto()
         {
             EventTypeName = ""
         };
@@ -34,7 +34,7 @@ public class EventTypeDtoValidatorTests
     public void EventTypeDto_should_not_have_validation_errors()
     {
         // Arrange
-        var dto = new EventTypeDto
+        var dto = new EventTypeCommandDto
         {
             EventTypeName = "Wedding"
         };

@@ -22,7 +22,7 @@ public class Albums
 
     [Column(nameof(Name))]
     [Length(50)]
-    public string Name { get; set; } = string.Empty;
+    public required string Name { get; set; } 
 
     [Column(nameof(CreatedOn))]
     public DateTimeOffset CreatedOn { get; set; }
