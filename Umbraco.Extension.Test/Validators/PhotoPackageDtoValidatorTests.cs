@@ -1,5 +1,5 @@
 ﻿using FluentValidation.TestHelper;
-using Umbraco.Extension.Dtos;
+using Umbraco.Extension.Dtos.Commands;
 using Umbraco.Extension.Validators;
 
 namespace Umbraco.Extension.Test.Validators;
@@ -18,7 +18,7 @@ public class PhotoPackageDtoValidatorTests
     public void PhotoPackageDto_should_not_have_validation_errors()
     {
         // Arrange
-        var dto = new PhotoPackageDto
+        var dto = new PhotoPackageCommandDto()
         {
             EventTypeId = Guid.NewGuid(),
             PhotoPackageName = "PackageName",

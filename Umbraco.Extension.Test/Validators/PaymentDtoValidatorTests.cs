@@ -1,5 +1,5 @@
 ﻿using FluentValidation.TestHelper;
-using Umbraco.Extension.Dtos;
+using Umbraco.Extension.Dtos.Commands;
 using Umbraco.Extension.Enum;
 using Umbraco.Extension.Validators;
 
@@ -19,7 +19,7 @@ public class PaymentDtoValidatorTests
     public void PaymentDto_should_not_have_validation_errors()
     {
         // Arrange
-        var dto = new PaymentDto
+        var dto = new PaymentCommandDto()
         {
             OrderId = Guid.NewGuid(),
             Paid = true,
