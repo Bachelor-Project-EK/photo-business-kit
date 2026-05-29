@@ -45,6 +45,18 @@ public class EventTypeService
             .ToList();
     }
 
+    public IEnumerable<EventTypeQueryDto> MembersGetAll()
+    {
+        using var database = _databaseFactory.CreateDatabase();
+
+        return database.Fetch<EventTypes>()
+            .Select(eventType => new EventTypeQueryDto
+            {
+                EventTypeName = eventType.Name
+            })
+            .ToList();
+    }
+
     public async Task<EventTypeCommandDto?> UpdateAsync(EventTypeCommandDto dto, Guid id)
     {
         using var database = _databaseFactory.CreateDatabase();
