@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Testcontainers.Azurite;
 using Umbraco.Extension.Services;
 
-namespace Umbraco.Extension.Test;
+namespace Umbraco.Extension.Test.IntegrationTest;
 
-public class PhotoServiceTests
+public class AzureBlobPhotoStorageTests
 {
 
     private BlobContainerClient _containerClient = null!;

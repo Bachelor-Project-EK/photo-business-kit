@@ -3,7 +3,7 @@ using Umbraco.Extension.Dtos;
 using Umbraco.Extension.Models;
 using Umbraco.Extension.Validators;
 
-namespace Umbraco.Extension.Test
+namespace Umbraco.Extension.Test.UnitTest
 {
     public class PhotoDtoValidatorTests
     {

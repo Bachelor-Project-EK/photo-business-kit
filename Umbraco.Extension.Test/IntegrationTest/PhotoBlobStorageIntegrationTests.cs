@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Umbraco.Extension.Dtos;
 using Umbraco.Extension.Validators;
 
-namespace Umbraco.Extension.Test
+namespace Umbraco.Extension.Test.IntegrationTest
 {
     internal class PhotoBlobStorageIntegrationTests
     {
