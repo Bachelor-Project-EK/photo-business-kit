@@ -1,32 +1,50 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using DotNet.Testcontainers.Builders;
 using Microsoft.AspNetCore.Http;
+using Testcontainers.Azurite;
 using Umbraco.Extension.Dtos;
 using Umbraco.Extension.Validators;
 
+
+
 namespace Umbraco.Extension.Test
 {
-    internal class PhotoBlobStorageIntegrationTests
+    [TestFixture]
+    public class PhotoBlobStorageIntegrationTests
     {
-        private const string ContainerName = "umbraco-media";
-        private const string ConnectionString = "AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;AccountName=devstoreaccount1;BlobEndpoint=http://127.0.0.1:27000/devstoreaccount1;";
 
-        private BlobServiceClient _blobServiceClient = null!;
-        private BlobContainerClient _containerClient = null!;
+        private AzuriteContainer _azurite;
+
+        [OneTimeSetUp]
+        public async Task GlobalSetup()
+        {
+            _azurite = new AzuriteBuilder()
+                .WithImage("mcr.microsoft.com/azure-storage/azurite")
+                .WithName("azurite-testcontainer")
+                .Build();
+
+            await _azurite.StartAsync();
+        }
+
+        [OneTimeTearDown]
+        public async Task GlobalTeardown()
+        {
+            await _azurite.DisposeAsync();
+
+        }
 
         [TestCase("sample-photo.jpg")]
         [TestCase("virus.jpg")]
         public async Task ValidateAndUploadRealJpeg_ToAzurite_ShouldWork(string fileName)
         {
             // Arrange
-            var blobServiceClient = new BlobServiceClient(ConnectionString);
+            var blobServiceClient = new BlobServiceClient(_azurite.GetConnectionString());
 
             var containerClient =
-                blobServiceClient.GetBlobContainerClient(ContainerName);
+                blobServiceClient.GetBlobContainerClient(_azurite.Name.Substring(1, _azurite.Name.Length - 1));
 
-            await containerClient.CreateIfNotExistsAsync(
-                PublicAccessType.None
-                );
+            await containerClient.CreateIfNotExistsAsync();
 
             var albumId = Guid.NewGuid();
             var photoId = Guid.NewGuid();
@@ -67,7 +85,7 @@ namespace Umbraco.Extension.Test
             {
                 Assert.That(validationResult.IsValid, Is.True);
 
-            var blobClient = containerClient.GetBlobClient(blobName);
+                var blobClient = containerClient.GetBlobClient(blobName);
 
                 // Act
                 await using var uploadStream = file.OpenReadStream();
@@ -100,7 +118,7 @@ namespace Umbraco.Extension.Test
                 Assert.That(downloadedBytes, Is.EqualTo(imageBytes));
 
                 // Cleanup
-                //await blobClient.DeleteIfExistsAsync();
+                await blobClient.DeleteIfExistsAsync();
             }
             else
             {
