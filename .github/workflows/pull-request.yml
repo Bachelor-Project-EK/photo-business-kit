@@ -1,0 +1,9 @@
+name: Pull Request Workflow
+
+on:
+  pull_request:
+
+jobs:
+  unit-tests:
+    name: Run backend Unit Tests
+    uses: ./.github/workflows/unit-tests.yml

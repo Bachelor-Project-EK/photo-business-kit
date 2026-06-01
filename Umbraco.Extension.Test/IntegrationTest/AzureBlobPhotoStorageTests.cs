@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Http;
 using Testcontainers.Azurite;
 using Umbraco.Extension.Services;
+using Umbraco.Extension.Test.UnitTest;
 
 namespace Umbraco.Extension.Test.IntegrationTest;
 
+[Category(nameof(TestCategory.IntegrationTest))]
 public class AzureBlobPhotoStorageTests
 {
-
     private BlobContainerClient _containerClient = null!;
     private AzureBlobPhotoStorageService _service = null!;
 
@@ -16,7 +17,6 @@ public class AzureBlobPhotoStorageTests
     [OneTimeSetUp]
     public async Task GlobalSetup()
     {
-
         _azurite = new AzuriteBuilder()
             .WithImage("mcr.microsoft.com/azure-storage/azurite:latest")
             .WithName("azurite-testcontainer")
@@ -34,13 +34,11 @@ public class AzureBlobPhotoStorageTests
     [SetUp]
     public async Task SetUp()
     {
-
         _containerClient = new BlobContainerClient(
             _azurite.GetConnectionString(),
             _azurite.Name.Substring(1, _azurite.Name.Length - 1),
             options: new BlobClientOptions(Azure.Storage.Blobs.BlobClientOptions.ServiceVersion.V2025_11_05)
-            );
-
+        );
 
 
         await _containerClient.DeleteIfExistsAsync();

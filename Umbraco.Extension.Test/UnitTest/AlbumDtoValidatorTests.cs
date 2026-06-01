@@ -3,7 +3,8 @@ using Umbraco.Extension.Validators;
 
 namespace Umbraco.Extension.Test.UnitTest
 {
-    internal class AlbumDtoValidatorTests
+    [Category(nameof(TestCategory.UnitTest))]
+    public class AlbumDtoValidatorTests
     {
         private AlbumDtoValidator _validator = null!;
 
@@ -35,6 +36,7 @@ namespace Umbraco.Extension.Test.UnitTest
 
             Assert.That(result.IsValid, Is.False);
         }
+
         [TestCase(" Wedding")]
         [TestCase("Wedding ")]
         [TestCase(" Wedding ")]
@@ -163,5 +165,4 @@ namespace Umbraco.Extension.Test.UnitTest
             };
         }
     }
-
 }

@@ -5,6 +5,7 @@ using Umbraco.Extension.Validators;
 
 namespace Umbraco.Extension.Test.UnitTest
 {
+    [Category(nameof(TestCategory.UnitTest))]
     public class PhotoDtoValidatorTests
     {
         private const long OneMb = 1024 * 1024;

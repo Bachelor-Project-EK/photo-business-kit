@@ -8,6 +8,7 @@ using Umbraco.Extension.Services;
 
 namespace Umbraco.Extension.Test.UnitTest
 {
+    [Category(nameof(TestCategory.UnitTest))]
     public class PhotoServiceTest
     {
         private Mock<IUmbracoDatabaseFactory> _databaseFactory = null!;

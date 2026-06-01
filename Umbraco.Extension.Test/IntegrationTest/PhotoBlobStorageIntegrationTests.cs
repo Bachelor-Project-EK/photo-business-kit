@@ -3,9 +3,10 @@ using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Umbraco.Extension.Dtos;
 using Umbraco.Extension.Validators;
-
+using Umbraco.Extension.Test.UnitTest;
 namespace Umbraco.Extension.Test.IntegrationTest
 {
+    [Category(nameof(TestCategory.IntegrationTest))]
     internal class PhotoBlobStorageIntegrationTests
     {
         private const string ContainerName = "umbraco-media";
