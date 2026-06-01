@@ -42,6 +42,12 @@ namespace Umbraco.Extension.Composers
                     // }
                 });
 
+                opt.SwaggerDoc(Constants.SurfaceApiName, new OpenApiInfo
+                {
+                    Title = "Umbraco Extension Surface API",
+                    Version = "1.0",
+                });
+
                 // Enable Umbraco authentication for the "Example" Swagger document
                 // PR: https://github.com/umbraco/Umbraco-CMS/pull/15699
                 opt.OperationFilter<UmbracoExtensionOperationSecurityFilter>();

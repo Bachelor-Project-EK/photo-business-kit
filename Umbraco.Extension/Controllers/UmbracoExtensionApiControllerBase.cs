@@ -10,7 +10,7 @@ namespace Umbraco.Extension.Controllers
     [BackOfficeRoute("umbracoextension/api/v{version:apiVersion}")]
     [Authorize(Policy = AuthorizationPolicies.SectionAccessContent)]
     [MapToApi(Constants.ApiName)]
-    public class UmbracoExtensionApiControllerBase : ControllerBase
+    public abstract class UmbracoExtensionApiControllerBase : ControllerBase
     {
     }
 }

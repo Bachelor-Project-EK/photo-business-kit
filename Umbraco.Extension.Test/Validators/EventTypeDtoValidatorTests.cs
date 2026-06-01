@@ -1,9 +1,11 @@
 ﻿using FluentValidation.TestHelper;
 using Umbraco.Extension.Dtos.Commands;
+using Umbraco.Extension.Test.UnitTest;
 using Umbraco.Extension.Validators;
 
 namespace Umbraco.Extension.Test.Validators;
 
+[Category(nameof(TestCategory.UnitTest))]
 public class EventTypeDtoValidatorTests
 {
     private EventTypeDtoValidator _validator = null!;
