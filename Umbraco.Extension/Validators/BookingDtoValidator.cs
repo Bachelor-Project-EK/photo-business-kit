@@ -26,6 +26,7 @@ namespace Umbraco.Extension.Validators
                 .MaximumLength(500)
                 .WithMessage("Comment cannot exceed 500 characters.")
                 .Matches(@"^[\p{L}\p{N} _'&().,\-]+$")
+                .When(x => !string.IsNullOrEmpty(x.Comment))
                 .WithMessage("Name may only contain letters, numbers, spaces and the characters - _ ' & ( ) . ,");
 
             RuleFor(x => x.PhotoPackageId)

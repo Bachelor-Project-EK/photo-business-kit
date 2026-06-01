@@ -1,6 +1,6 @@
 using NPoco;
 using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
-using Umbraco.Extension.Enum;
+using Umbraco.Extension.Enums;
 namespace Umbraco.Extension.Models;
 
 [TableName(nameof(Payments))]

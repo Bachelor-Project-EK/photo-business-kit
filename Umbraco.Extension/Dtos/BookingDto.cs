@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
-using Umbraco.Extension.Enum;
+using Umbraco.Extension.Enums;
 using Umbraco.Extension.Models;
 
 namespace Umbraco.Extension.Dtos

@@ -1,4 +1,4 @@
-namespace Umbraco.Extension.Enum;
+namespace Umbraco.Extension.Enums;
 
 public enum BookingStatus
 {
@@ -6,5 +6,6 @@ public enum BookingStatus
     Cancel,
     Approved,
     Propose,
-    Completed
+    Completed,
+    Rejected
 }

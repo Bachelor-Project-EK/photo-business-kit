@@ -1,4 +1,4 @@
-using Umbraco.Extension.Enum;
+using Umbraco.Extension.Enums;
 
 namespace Umbraco.Extension.Dtos.Commands;
 
