@@ -13,13 +13,14 @@ public class AzureBlobPhotoStorageTests
     private AzureBlobPhotoStorageService _service = null!;
 
     private AzuriteContainer _azurite;
+    private const string ContainerName = "azurite-testcontainer";
 
     [OneTimeSetUp]
     public async Task GlobalSetup()
     {
         _azurite = new AzuriteBuilder()
             .WithImage("mcr.microsoft.com/azure-storage/azurite:latest")
-            .WithName("azurite-testcontainer")
+            .WithName($"{ContainerName}-{Guid.NewGuid():N}")
             .Build();
 
         await _azurite.StartAsync();
@@ -36,7 +37,7 @@ public class AzureBlobPhotoStorageTests
     {
         _containerClient = new BlobContainerClient(
             _azurite.GetConnectionString(),
-            _azurite.Name.Substring(1, _azurite.Name.Length - 1),
+           ContainerName,
             options: new BlobClientOptions(Azure.Storage.Blobs.BlobClientOptions.ServiceVersion.V2025_11_05)
         );
 
