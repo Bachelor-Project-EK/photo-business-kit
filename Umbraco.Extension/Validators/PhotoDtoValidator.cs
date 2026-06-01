@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Umbraco.Extension.Dtos;
@@ -8,7 +9,7 @@ public class PhotoDtoValidator : AbstractValidator<PhotoDto>
 {
     private const long MaxFileSizeBytes = 50 * 1024 * 1024; // 50 MB
     private const long MaxTotalSizeBytes = 250 * 1024 * 1024; // 250 MB per upload
-    private const int MaxNumberOfFiles = 10;
+    private const int MaxNumberOfFiles = 50;
 
 
     private static readonly HashSet<string> AllowedExtensions =
@@ -32,7 +33,7 @@ public class PhotoDtoValidator : AbstractValidator<PhotoDto>
             .NotEmpty()
             .WithMessage("At least one photo is required.")
             .Must(files => files!.Count <= MaxNumberOfFiles)
-            .WithMessage("You can upload maximum 10 photos at a time.")
+            .WithMessage("You can upload maximum 50 photos at a time.")
             .Must(files => files!.Sum(file => file.Length) <= MaxTotalSizeBytes)
             .WithMessage("The total upload must not exceed 250 MB.");
 
@@ -42,17 +43,25 @@ public class PhotoDtoValidator : AbstractValidator<PhotoDto>
             .WithMessage("Each photo file is required.")
             .NotEmpty()
             .WithMessage("Each photo file is required.")
-            //.Must(file => file is not null && file.Length > 0)
-            .Must(file => file.FileName.Length is > 0 and <= 255)
+            .Must(file => Path.GetFileNameWithoutExtension(file.FileName).Length is > 0 and <= 255)
             .WithMessage("A photo must not be empty.")
+            .Must(file => Regex.IsMatch(file.FileName, @"^[\p{L}\p{N} _'&().,\-]+$"))
+            .WithMessage("The photo name contains invalid character and may only contain letters, numbers, spaces and the characters - _ ' & ( ) . ,")
             .Must(file => file.Length <= MaxFileSizeBytes)
             .WithMessage("Each photo must not exceed 50 MB.")
+            .Must(file => {
+                var nameWithoutExtension =
+                    Path.GetFileNameWithoutExtension(file.FileName);
+                return nameWithoutExtension == nameWithoutExtension.Trim();
+            })
+            .WithMessage("The photo name must not contain leading or trailing whitespace.")
             .Must(HaveAllowedExtension)
             .WithMessage("Only .jpg and .jpeg files are allowed.")
             .Must(HaveAllowedContentType)
             .WithMessage("The file content type must be image/jpeg.")
             .Must(HaveValidJpegSignature)
             .WithMessage("The uploaded file is not a valid JPEG file.");
+
 
     }
 

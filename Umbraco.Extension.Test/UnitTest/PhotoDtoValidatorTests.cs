@@ -9,6 +9,10 @@ namespace Umbraco.Extension.Test.UnitTest
     public class PhotoDtoValidatorTests
     {
         private const long OneMb = 1024 * 1024;
+
+        private const long MaxFileSize = 50 * OneMb;
+
+
         private PhotoDtoValidator _validator = null!;
 
         [SetUp]
@@ -16,207 +20,274 @@ namespace Umbraco.Extension.Test.UnitTest
         {
             _validator = new PhotoDtoValidator();
         }
-        
-        [Test]
-        public void Validate_FileNameLongerThanCharacters256_ShouldFail()
+
+        [TestCase(false, true)] // Valid partition: Et udfyldt AlbumId
+        [TestCase(true, false)] // Invalid partition: Guid.Empty
+        public void Validate_AlbumId_ShouldReturnExpectedResult(bool useEmptyAlbumId, bool expectedIsValid)
         {
-            // The maximum file name length (including extension) is 255 characters. 
-            // This test uses 252 'a' characters + 4 characters for ".jpg" = 256 total, which exceeds the limit.
-            var longFileName = new string('a', 252) + ".jpg";
+            // Arrange
             var dto = new PhotoDto
             {
-                AlbumId = Guid.NewGuid(),
-                Files =
-                [
-                    CreateJpegFile(longFileName, 20 * OneMb),
-                ]
+                AlbumId = useEmptyAlbumId ? Guid.Empty : Guid.NewGuid(),
+                Files = [CreateJpegFile("photo.jpg", 10 * OneMb)]
             };
 
+            // Act
             var result = _validator.Validate(dto);
 
-            Assert.That(result.IsValid, Is.False);
+            // Assert
+            Assert.That(result.IsValid, Is.EqualTo(expectedIsValid));
         }
 
-        [Test]
-        public void Validate_MultipleValidJpegFiles_ShouldPass()
-        {
-            var dto = new PhotoDto
-            {
-                AlbumId = Guid.NewGuid(),
-                Files =
-                [
-                    CreateJpegFile("wedding-001.jpg", 20 * OneMb),
-                    CreateJpegFile("wedding-002.jpeg", 35 * OneMb),
-                    CreateJpegFile("wedding-003.JPG", 40 * OneMb)
-                ]
-            };
+        [TestCase(1, true)] //Lower boundary : 1 file is valid
+        [TestCase(50, true)] //Upper boundary: 50 files is valid
 
-            var result = _validator.Validate(dto);
-
-            Assert.That(result.IsValid, Is.True);
-        }
-
-        [TestCase("customer-photo.jpg")]
-        [TestCase("customer-photo.jpeg")]
-        [TestCase("customer-photo.JPG")]
-        [TestCase("customer-photo.JPEG")]
-        public void Validate_ValidJpegExtension_ShouldPass(string fileName)
+        [TestCase(0, false)] // Outside lower boundary: 0 files is invalid
+        [TestCase(51, false)] // Outside upper boundary: 51 files is invalid
+        [TestCase(10000, false)] // Extreme case: A very large number of files is invalid
+        public void Validate_NumberOfFiles_ShouldReturnExpectedResult(int numberOfFiles, bool expectedIsValid)
         {
             var dto = new PhotoDto
             {
                 AlbumId = Guid.NewGuid(),
-                Files =
-                [
-                    CreateJpegFile(fileName, 10 * OneMb)
-                ]
+                Files = Enumerable.Range(1, numberOfFiles)
+                    .Select(index => CreateJpegFile($"photo-{index}.jpg", 1 * OneMb)).ToList()
             };
-
             var result = _validator.Validate(dto);
-
-            Assert.That(result.IsValid, Is.True);
+            Assert.That(result.IsValid, Is.EqualTo(expectedIsValid));
         }
-
-        [Test]
-        public void Validate_OneFileExceeds50Mb_ShouldFail()
-        {
-            var dto = new PhotoDto
-            {
-                AlbumId = Guid.NewGuid(),
-                Files =
-                [
-                    CreateJpegFile("large-photo.jpg", 51 * OneMb)
-                ]
-            };
-
-            var result = _validator.Validate(dto);
-
-            Assert.That(result.IsValid, Is.False);
-            Assert.That(
-                result.Errors.Any(error =>
-                    error.ErrorMessage.Contains("50 MB")),
-                Is.True);
-        }
-
-        [Test]
-        public void Validate_TotalUploadExceeds250Mb_ShouldFail()
-        {
-            var dto = new PhotoDto
-            {
-                AlbumId = Guid.NewGuid(),
-                Files =
-                [
-                    CreateJpegFile("photo-001.jpg", 45 * OneMb),
-                    CreateJpegFile("photo-002.jpg", 45 * OneMb),
-                    CreateJpegFile("photo-003.jpg", 45 * OneMb),
-                    CreateJpegFile("photo-004.jpg", 45 * OneMb),
-                    CreateJpegFile("photo-005.jpg", 45 * OneMb),
-                    CreateJpegFile("photo-006.jpg", 45 * OneMb)
-                ]
-            };
-
-            // 6 × 45 MB = 270 MB total.
-            // Each individual photo is valid, but total upload is invalid.
-
-            var result = _validator.Validate(dto);
-
-            Assert.That(result.IsValid, Is.False);
-            Assert.That(
-                result.Errors.Any(error =>
-                    error.ErrorMessage.Contains("250 MB")),
-                Is.True);
-        }
-        [Test]
-        public void Validate_MoreThan10Files_ShouldFail()
-        {
-            var dto = new PhotoDto
-            {
-                AlbumId = Guid.NewGuid(),
-                Files = Enumerable
-                    .Range(1, 11)
-                    .Select(index => CreateJpegFile($"photo-{index}.jpg", 1 * OneMb))
-                    .ToList()
-            };
-
-            var result = _validator.Validate(dto);
-
-            Assert.That(result.IsValid, Is.False);
-            Assert.That(
-                result.Errors.Any(error =>
-                    error.ErrorMessage.Contains("maximum 10")),
-                Is.True);
-        }
-
-        [Test]
-        public void Validate_InvalidFileExtension_ShouldFail()
-        {
-            var dto = new PhotoDto
-            {
-                AlbumId = Guid.NewGuid(),
-                Files =
-                [
-                    CreateJpegFile("photo.png", 10 * OneMb)
-                ]
-            };
-
-            var result = _validator.Validate(dto);
-
-            Assert.That(result.IsValid, Is.False);
-        }
-
-        [Test]
-        public void Validate_InvalidJpegSignature_ShouldFail()
-        {
-            var dto = new PhotoDto
-            {
-                AlbumId = Guid.NewGuid(),
-                Files =
-                [
-                    CreateInvalidFile("fake-photo.jpg", 10 * OneMb)
-                ]
-            };
-
-            var result = _validator.Validate(dto);
-
-            Assert.That(result.IsValid, Is.False);
-        }
-
 
         [Test]
         [TestCaseSource(nameof(EmptyFilesTestData))]
         public void Validate_Empty_Or_Null_FilesList_ShouldFail(List<IFormFile>? obj)
         {
+            // Arrange
             var dto = new PhotoDto
             {
                 AlbumId = Guid.NewGuid(),
                 Files = obj
             };
-
+            // Act
             var result = _validator.Validate(dto);
 
+            //Assert
             Assert.That(result.IsValid, Is.False);
         }
         private static IEnumerable<List<IFormFile>?> EmptyFilesTestData()
         {
-            yield return null;
-            yield return [];
+            yield return null; // Invalid partition: files is null
+            yield return []; // Invalid partition: files is an empty list
         }
 
         [Test]
-        public void Validate_EmptyAlbumId_ShouldFail()
+        [TestCase("customer-photo.jpg", true)]   // Valid partition: .jpg
+        [TestCase("customer-photo.jpeg", true)]  // Valid partition: .jpeg
+        [TestCase("customer-photo.JPG", true)]   // Valid partition: Uppercase .JPG
+        [TestCase("customer-photo.JPEG", true)]  // Valid partition: Uppercase .JPEG
+        [TestCase("customer-photo.png", false)]  // Invalid partition: .png
+        [TestCase("customer-photo.gif", false)]  // Invalid partition: .gif
+        [TestCase("customer-photo.webp", false)] // Invalid partition: .webp
+        [TestCase("customer-photo", false)]      // Invalid partition: No extension
+        public void Validate_FileExtension_ShouldReturnExpectedResult(string fileName, bool expectedIsValid)
+        {
+            // Arrange
+            var dto = new PhotoDto
+            {
+                AlbumId = Guid.NewGuid(),
+                Files = [
+                    CreateJpegFile(fileName, 10 * OneMb)
+                ]
+            };
+            // Act
+            var result = _validator.Validate(dto);
+            // Assert
+            Assert.That(result.IsValid, Is.EqualTo(expectedIsValid));
+        }
+
+        [TestCase("photo<script>.jpg")] // Invalid partition: HTML-/script-lignende tegn
+        [TestCase("photo?.jpg")]        // Invalid partition: Ikke-tilladt specialtegn
+        public void Validate_FileNameWithInvalidCharacters_ShouldFail(string fileName)
+        {
+            // Arrange
+            var dto = new PhotoDto
+            {
+                AlbumId = Guid.NewGuid(),
+                Files = [
+                    CreateJpegFile(fileName, 10 * OneMb)
+                ]
+            };
+            // Act
+            var result = _validator.Validate(dto);
+            // Assert
+            Assert.That(result.IsValid, Is.False);
+        }
+
+        //Valid partition
+        [TestCase(1, true)] // Lower boundary: Exactly 1 file is valid
+        [TestCase(50, true)] // Upper boundary: Exactly 50 files is valid
+
+        //Invalid partition
+        [TestCase(0, false)] // Outside lower boundary: 0 files is invalid
+        [TestCase(51, false)] // Outside upper boundary: 51 files is invalid
+        public void Validate_Exactly10Files_ShouldPass(int numberOfFiles, bool expectedIsValid)
         {
             var dto = new PhotoDto
             {
-                AlbumId = Guid.Empty,
-                Files =
-                [
-                    CreateJpegFile("photo.jpg", 10 * OneMb)
+                AlbumId = Guid.NewGuid(),
+                Files = Enumerable.Range(0, numberOfFiles).Select(index => CreateJpegFile($"photo-{index}.jpg", 1 * OneMb)).ToList()
+
+
+            };
+            var result = _validator.Validate(dto);
+            Assert.That(result.IsValid, Is.EqualTo(expectedIsValid));
+        }
+
+
+        [TestCase(1, true)]    // Lower boundary: 1 character + extension is valid
+        [TestCase(255, true)]  // Upper boundary: 255 characters (including extension) is valid
+
+        [TestCase(256, false)] // Outside lower/upper boundary: 256 characters is invalid
+        [TestCase(512, false)] // Extreme case: A very long file name is invalid
+        public void Validate_FileNameLength_ShouldReturnExpectedResult(int totalFileNameLength, bool expectedIsValid)
+        {
+            // Arrange
+            var extension = ".jpg";
+            //var numberOfNameCharacters = totalFileNameLength - extension.Length;
+
+            var fileName = new string('a', totalFileNameLength) + extension;
+
+            var dto = new PhotoDto
+            {
+                AlbumId = Guid.NewGuid(),
+                Files = [
+                    CreateJpegFile(fileName, 10 * OneMb)
                 ]
             };
 
+            // Act
             var result = _validator.Validate(dto);
 
-            Assert.That(result.IsValid, Is.False);
+            // Assert
+            Assert.That(result.IsValid, Is.EqualTo(expectedIsValid));
         }
+
+        //Valid partitions
+        [TestCase(1 * OneMb, true)]                 // Lower boundary: 1 byte is valid
+        [TestCase(MaxFileSize, true)]        // Upper boundary: Exactly 50 MB is valid
+
+        //Invalid partitions
+        [TestCase(0 * OneMb, false)]                 // Outside lower boundary: 0 bytes is invalid
+        [TestCase(MaxFileSize + 1, false)]   // Outside upper boundary: 50 MB + 1 byte
+        [TestCase(100 * OneMb, false)]        // Extreme case: 100 MB is invalid
+
+        public void Validate_FileSize_ShouldReturnExpectedResult(long fileSize, bool expectedIsValid)
+        {
+            // Arrange
+            var dto = new PhotoDto
+            {
+                AlbumId = Guid.NewGuid(),
+                Files = [
+                    CreateJpegFile("photo.jpg", fileSize)
+                ]
+            };
+            // Act
+            var result = _validator.Validate(dto);
+            // Assert
+            Assert.That(result.IsValid, Is.EqualTo(expectedIsValid));
+        }
+
+        [Test]
+        [TestCaseSource(nameof(TotalUploadSizeTestData))]
+        public void Validate_TotalUploadSize_ShouldReturnExpectedResult(long[] fileSizes, bool expectedIsValid)
+        {
+            // Arrange
+            var files = fileSizes
+                .Select((fileSize, index) => CreateJpegFile($"photo-{index + 1}.jpg", fileSize))
+                .ToList();
+            var dto = new PhotoDto
+            {
+                AlbumId = Guid.NewGuid(),
+                Files = files
+            };
+
+            // Act
+            var result = _validator.Validate(dto);
+
+            // Assert
+            Assert.That(result.IsValid, Is.EqualTo(expectedIsValid));
+        }
+
+        private static IEnumerable<TestCaseData> TotalUploadSizeTestData()
+        {
+            //  Upper boundary: 250 MB : TotalUpload_Exactly250Mb_ShouldPass
+            yield return new TestCaseData(new[]
+            {
+                50 * OneMb,
+                50 * OneMb,
+                50 * OneMb,
+                50 * OneMb,
+                50 * OneMb
+            }, true);
+
+
+            // Outside upper boundary: 250 MB + 1 byte:  TotalUpload_250MbPlusOneByte_ShouldFail
+            yield return
+                new TestCaseData(new[]
+                {
+                    50 * OneMb,
+                    50 * OneMb,
+                    50 * OneMb,
+                    50 * OneMb,
+                    49 * OneMb,
+                    1 * OneMb + 1
+                }, false);
+
+        }
+
+        [TestCase("image/jpeg", true)]   // Valid partition: Allowed MIME type
+
+        [TestCase(null, false)]          // Invalid partition: Null value
+        [TestCase("", false)]            // Invalid partition: Empty string
+        [TestCase("image/png", false)]   // Invalid partition: PNG
+        [TestCase("application/pdf", false)] // Invalid partition: PDF
+
+        public void Validate_ContentType_ShouldReturnExpectedResult(string? contentType, bool expectedIsValid)
+        {
+            // Arrange
+            var dto = new PhotoDto
+            {
+                AlbumId = Guid.NewGuid(),
+                Files =
+                [ 
+                    // We are testing only the content type
+                    CreateJpegFile("photo.jpg", 10 * OneMb, contentType!)
+                ]
+            };
+
+            // Act
+            var result = _validator.Validate(dto);
+
+            // Assert
+            Assert.That(result.IsValid, Is.EqualTo(expectedIsValid));
+        }
+
+        [TestCase(true, true)] // Valid partition: Valid JPEG signature
+        [TestCase(false, false)] // Invalid partition: Invalid JPEG signature
+        public void Validate_JpegSignature_ShouldReturnExpectedResult(bool useValidJpegSignature, bool expectedIsValid)
+        {
+            // Arrange
+            var file = useValidJpegSignature
+                ? CreateJpegFile("photo.jpg", 10 * OneMb)
+                : CreateInvalidFile("photo.jpg", 10 * OneMb);
+            var dto = new PhotoDto { AlbumId = Guid.NewGuid(), Files = [file] };
+
+            // Act
+            var result = _validator.Validate(dto);
+
+            // Assert
+            Assert.That(result.IsValid, Is.EqualTo(expectedIsValid));
+        }
+
 
         [Test]
         public void CreatePhotos_FromValidPhotoDto_ShouldMapCorrectDatabaseValues()
@@ -253,32 +324,12 @@ namespace Umbraco.Extension.Test.UnitTest
             Assert.That(photo.FileSizeInBytes, Is.EqualTo(dto.Files[0].Length));
         }
 
-        [TestCase(null)]
-        [TestCase("")]
-        [TestCase("application/pdf")]
-        public void Validate_ContentType_With_Application_pdf_ShouldFail(string? contentType)
-        {
-            var dto = new PhotoDto
-            {
-                AlbumId = Guid.NewGuid(),
-                Files =
-                [
-                    CreateJpegFile("photo.png", 10 * OneMb, contentType)
-                ]
-            };
-
-            var result = _validator.Validate(dto);
-
-            Assert.That(result.IsValid, Is.False);
-        }
-
-
         private static IFormFile CreateJpegFile(string fileName, long fileSize, string contentType = "image/jpeg")
         {
             // Valid JPEG signature
             byte[] jpegContent =
             [
-                0xFF, 0xD8, 0xFF, 0xE0
+                0xFF, 0xD8, 0xFF
             ];
             var stream = new MemoryStream(jpegContent);
 
