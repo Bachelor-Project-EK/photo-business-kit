@@ -2,6 +2,7 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Extension.Dtos;
 using Umbraco.Extension.Dtos.Commands;
 using Umbraco.Extension.Services;
 using Umbraco.Extension.Validators;
@@ -19,5 +20,13 @@ public class CmsComposer : IComposer
         builder.Services.AddScoped<IValidator<EventTypeCommandDto>, EventTypeDtoValidator>();
         builder.Services.AddScoped<IValidator<PaymentCommandDto>, PaymentDtoValidator>();
         builder.Services.AddScoped<IValidator<PhotoPackageCommandDto>, PhotoPackageDtoValidator>();
+
+        builder.Services.AddScoped<IPhotoService, PhotoService>();
+        builder.Services.AddScoped<IPhotoStorageService, AzureBlobPhotoStorageService>();
+        builder.Services.AddScoped<IValidator<PhotoDto>, PhotoDtoValidator>();
+
+        builder.AddAzureBlobMediaFileSystem();
+        builder.AddAzureBlobImageSharpCache();
+
     }
 }

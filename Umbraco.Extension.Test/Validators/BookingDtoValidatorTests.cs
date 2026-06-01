@@ -1,10 +1,12 @@
 ﻿using Umbraco.Extension.Dtos;
 using Umbraco.Extension.Validators;
 using FluentValidation.TestHelper;
+using Umbraco.Extension.Test.UnitTest;
 
 namespace Umbraco.Extension.Test.Validators
 {
     [TestFixture]
+    [Category(nameof(TestCategory.UnitTest))]
     public class BookingDtoValidatorTests
     {
         private BookingDtoValidator _validator;

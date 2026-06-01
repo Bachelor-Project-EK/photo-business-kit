@@ -6,10 +6,14 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- Umbraco API packages - Used by extension templates -->
+    <PackageVersion Include="Azure.Identity" Version="1.21.0" />
+    <PackageVersion Include="Azure.Storage.Blobs" Version="12.28.0" />
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
     <PackageVersion Include="Umbraco.Cms.Api.Common" Version="17.3.4" />
     <PackageVersion Include="Umbraco.Cms.Api.Management" Version="17.3.4" />
     <PackageVersion Include="Umbraco.Cms.Web.Common" Version="17.3.4" />
     <PackageVersion Include="Umbraco.Cms.Web.Website" Version="17.3.4" />
+    <PackageVersion Include="Umbraco.StorageProviders.AzureBlob" Version="17.0.0" />
+    <PackageVersion Include="Umbraco.StorageProviders.AzureBlob.ImageSharp" Version="17.0.0" />
   </ItemGroup>
 </Project>
