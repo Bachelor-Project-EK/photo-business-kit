@@ -6,7 +6,7 @@ using Umbraco.Extension.Validators;
 using Umbraco.Extension.Test.UnitTest;
 namespace Umbraco.Extension.Test.IntegrationTest
 {
-    [Category(nameof(TestCategory.IntegrationTest))]
+    // [Category(nameof(TestCategory.IntegrationTest))]
     internal class PhotoBlobStorageIntegrationTests
     {
         private const string ContainerName = "umbraco-media";
