@@ -1,6 +1,6 @@
 ﻿using FluentValidation.TestHelper;
 using Umbraco.Extension.Dtos.Commands;
-using Umbraco.Extension.Enum;
+using Umbraco.Extension.Enums;
 using Umbraco.Extension.Test.UnitTest;
 using Umbraco.Extension.Validators;
 

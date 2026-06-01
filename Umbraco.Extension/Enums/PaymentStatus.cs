@@ -1,4 +1,4 @@
-namespace Umbraco.Extension.Enum;
+namespace Umbraco.Extension.Enums;
 
 public enum PaymentStatus
 {

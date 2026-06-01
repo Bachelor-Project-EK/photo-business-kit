@@ -1,6 +1,6 @@
 using NPoco;
 using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
-using Umbraco.Extension.Enum;
+using Umbraco.Extension.Enums;
 
 namespace Umbraco.Extension.Models;
 
@@ -42,5 +42,5 @@ public class Bookings
 
     [ResultColumn]
     [Reference(ReferenceType.OneToOne, ColumnName = nameof(PhotoPackageId), ReferenceMemberName = nameof(PhotoPackages.Id))]
-    public PhotoPackages? PhotoPackage { get; set; }
+    public PhotoPackages PhotoPackage { get; set; } = null!;
 }
