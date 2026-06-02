@@ -1,0 +1,23 @@
+﻿<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat Code Coverage">
+        <Configuration>
+          <ExcludeByFile>
+            **/wwwroot/,
+            **/Client/,
+            **/Composers/,
+            **/Controllers/,
+            **/Dtos/,
+            **/Enums/,
+            **/MigrationPlans/,
+            **/Migrations/,
+            **/Models/,
+            **/Notifications/,
+            **/Constants.cs
+            </ExcludeByFile>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>
