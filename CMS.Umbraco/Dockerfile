@@ -9,6 +9,9 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["CMS.Umbraco/CMS.Umbraco.csproj", "CMS.Umbraco/"]
 COPY ["CMS.Umbraco/Directory.Packages.props", "CMS.Umbraco/"]
+COPY ["Umbraco.Extension/Umbraco.Extension.csproj", "Umbraco.Extension/"]
+COPY ["Umbraco.Extension/Directory.Packages.props", "Umbraco.Extension/"]
+
 RUN dotnet restore "CMS.Umbraco/CMS.Umbraco.csproj"
 COPY . .
 WORKDIR "/src/CMS.Umbraco"

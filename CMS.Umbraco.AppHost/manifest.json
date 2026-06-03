@@ -1,0 +1,128 @@
+{
+  "resources": {
+    "db-password": {
+      "type": "parameter.v0",
+      "value": "{db-password.inputs.value}",
+      "inputs": {
+        "value": {
+          "type": "string",
+          "secret": true
+        }
+      }
+    },
+    "metadata-address": {
+      "type": "parameter.v0",
+      "value": "{metadata-address.inputs.value}",
+      "inputs": {
+        "value": {
+          "type": "string",
+          "secret": true
+        }
+      }
+    },
+    "client-id": {
+      "type": "parameter.v0",
+      "value": "{client-id.inputs.value}",
+      "inputs": {
+        "value": {
+          "type": "string",
+          "secret": true
+        }
+      }
+    },
+    "client-secret": {
+      "type": "parameter.v0",
+      "value": "{client-secret.inputs.value}",
+      "inputs": {
+        "value": {
+          "type": "string",
+          "secret": true
+        }
+      }
+    },
+    "logout-url": {
+      "type": "parameter.v0",
+      "value": "{logout-url.inputs.value}",
+      "inputs": {
+        "value": {
+          "type": "string",
+          "secret": true
+        }
+      }
+    },
+    "umbraco-blob-storage": {
+      "type": "azure.bicep.v0",
+      "path": "umbraco-blob-storage.module.bicep"
+    },
+    "umbraco-media": {
+      "type": "value.v0",
+      "connectionString": "{umbraco-blob-storage.outputs.blobEndpoint}"
+    },
+    "umbraco-sql-server": {
+      "type": "azure.bicep.v0",
+      "connectionString": "Server=tcp:{umbraco-sql-server.outputs.sqlServerFqdn},1433;Encrypt=True;Authentication=\u0022Active Directory Default\u0022",
+      "path": "umbraco-sql-server.module.bicep"
+    },
+    "UmbracoDb": {
+      "type": "value.v0",
+      "connectionString": "{umbraco-sql-server.connectionString};Database=UmbracoDb"
+    },
+    "umbraco-cms": {
+      "type": "container.v1",
+      "build": {
+        "context": "..",
+        "dockerfile": "../CMS.Umbraco/Dockerfile"
+      },
+      "env": {
+        "OpenIdConnect__MetadataAddress": "{metadata-address.value}",
+        "OpenIdConnect__ClientId": "{client-id.value}",
+        "OpenIdConnect__ClientSecret": "{client-secret.value}",
+        "OpenIdConnect__LogoutUrl": "{logout-url.value}",
+        "ConnectionStrings__umbracoDbDSN_ProviderName": "Microsoft.Data.SqlClient",
+        "ASPNETCORE_URLS": "http://\u002B:8080",
+        "Umbraco__CMS__Global__MainDomLock": "FileSystemMainDomLock",
+        "Umbraco__CMS__Hosting__LocalTempStorageLocation": "EnvironmentTemp",
+        "Umbraco__CMS__Examine__LuceneDirectoryFactory": "TempFileSystemDirectoryFactory",
+        "Umbraco__Storage__AzureBlob__Media__ConnectionString": "{umbraco-media.connectionString}",
+        "Umbraco__Storage__AzureBlob__Media__ContainerName": "umbraco-media",
+        "ConnectionStrings__umbracoDbDSN": "{UmbracoDb.connectionString}",
+        "UMBRACODBDSN_HOST": "{umbraco-sql-server.outputs.sqlServerFqdn}",
+        "UMBRACODBDSN_PORT": "1433",
+        "UMBRACODBDSN_URI": "mssql://{umbraco-sql-server.outputs.sqlServerFqdn}:1433/UmbracoDb",
+        "UMBRACODBDSN_JDBCCONNECTIONSTRING": "jdbc:sqlserver://{umbraco-sql-server.outputs.sqlServerFqdn}:1433;database=UmbracoDb;encrypt=true;trustServerCertificate=false",
+        "UMBRACODBDSN_DATABASENAME": "UmbracoDb",
+        "ConnectionStrings__umbracoBlobStorage": "{umbraco-media.connectionString}",
+        "UMBRACOBLOBSTORAGE_URI": "{umbraco-blob-storage.outputs.blobEndpoint}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http",
+          "targetPort": 8080,
+          "external": true
+        }
+      }
+    },
+    "umbraco-blob-storage-roles": {
+      "type": "azure.bicep.v0",
+      "path": "umbraco-blob-storage-roles.module.bicep",
+      "params": {
+        "umbraco_blob_storage_outputs_name": "{umbraco-blob-storage.outputs.name}",
+        "principalType": "",
+        "principalId": ""
+      }
+    },
+    "umbraco-sql-server-roles": {
+      "type": "azure.bicep.v0",
+      "path": "umbraco-sql-server-roles.module.bicep",
+      "params": {
+        "umbraco_sql_server_outputs_name": "{umbraco-sql-server.outputs.name}",
+        "umbraco_sql_server_outputs_sqlserveradminname": "{umbraco-sql-server.outputs.sqlServerAdminName}",
+        "principalId": "",
+        "principalName": "",
+        "principalType": ""
+      }
+    }
+  }
+}
