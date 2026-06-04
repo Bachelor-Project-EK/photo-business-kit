@@ -1,5 +1,8 @@
+using Azure.Storage.Blobs;
 using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Extension.Dtos;
@@ -31,11 +34,35 @@ public class CmsComposer : IComposer
         builder.Services.AddScoped<IValidator<PhotoPackageCommandDto>, PhotoPackageDtoValidator>();
 
         builder.Services.AddScoped<IPhotoService, PhotoService>();
-        builder.Services.AddScoped<IPhotoStorageService, AzureBlobPhotoStorageService>();
+        //builder.Services.AddScoped<IPhotoStorageService, AzureBlobPhotoStorageService>();
         builder.Services.AddScoped<IValidator<PhotoDto>, PhotoDtoValidator>();
+
+        builder.Services.AddSingleton(sp =>
+        {
+            var configuration = sp.GetRequiredService<IConfiguration>();
+            var logger = sp.GetRequiredService<ILoggerFactory>()
+                .CreateLogger("BlobStorageConfig");
+
+            var connectionString = configuration.GetConnectionString("umbracoBlobStorage");
+
+            logger.LogInformation(
+                "umbracoBlobStorage connection string exists: {Exists}, length: {Length}",
+                !string.IsNullOrWhiteSpace(connectionString),
+                connectionString?.Length ?? 0
+            );
+
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                logger.LogError("umbracoBlobStorage connection string is missing or empty.");
+                throw new InvalidOperationException("umbracoBlobStorage connection string is missing.");
+            }
+
+            return new BlobContainerClient(connectionString, "umbraco-media");
+        });
+
+        builder.Services.AddScoped<IPhotoStorageService, AzureBlobPhotoStorageService>();
 
         builder.AddAzureBlobMediaFileSystem();
         builder.AddAzureBlobImageSharpCache();
-
     }
 }
