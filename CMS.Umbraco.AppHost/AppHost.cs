@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using static System.Reflection.Metadata.BlobBuilder;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
@@ -17,8 +18,9 @@ var storage = builder.AddAzureStorage("umbraco-blob-storage")
         azurite.WithBlobPort(27000)
             .WithQueuePort(27001)
             .WithTablePort(27002);
-    })
-    .AddBlobs("umbraco-media");
+    });
+
+var blobs = storage.AddBlobs("umbraco-media");
 
 var sql = builder.AddAzureSqlServer("umbraco-sql-server")
     .RunAsContainer(options =>
@@ -46,6 +48,8 @@ builder.AddDockerfile(name: "umbraco-cms", contextPath: "..", dockerfilePath: "C
     .WithEnvironment("OpenIdConnect__ClientSecret", clientSecret)
     .WithEnvironment("OpenIdConnect__LogoutUrl", logoutUrl)
     .WithEnvironment("OpenIdConnect__ReturnAfterLogout", "https+http://umbraco-cms")
+    .WithEnvironment("Umbraco__Storage__AzureBlob__Media__ConnectionString", blobs)
+    .WithEnvironment("Umbraco__Storage__AzureBlob__Media__ContainerName", "umbraco-media")
     .WithBindMount("../CMS.Umbraco/wwwroot/media", "/app/wwwroot/media")
     .WithBindMount("../CMS.Umbraco/wwwroot/scripts", "/app/wwwroot/scripts")
     .WithBindMount("../CMS.Umbraco/wwwroot/css", "/app/wwwroot/css")
@@ -58,8 +62,8 @@ builder.AddDockerfile(name: "umbraco-cms", contextPath: "..", dockerfilePath: "C
     .WithExternalHttpEndpoints()
     .WithReference(db, "umbracoDbDSN")
     .WaitFor(db)
-    .WithReference(storage, "umbracoBlobStorage")
-    .WaitFor(storage)
+    .WithReference(blobs, "umbracoBlobStorage")
+    .WaitFor(blobs)
     .PublishAsDockerComposeService((resource, service) =>
     {
         service.DependsOn = new()
