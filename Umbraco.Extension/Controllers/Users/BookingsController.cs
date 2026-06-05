@@ -11,7 +11,6 @@ namespace Umbraco.Extension.Controllers.Users;
 
 [ApiVersion("1.0")]
 [ApiExplorerSettings(GroupName = "Bookings")]
-[Route("[controller]")]
 public class BookingsController : UmbracoExtensionApiControllerBase
 {
     private readonly IValidator<BookingDto> _validator;
@@ -25,7 +24,7 @@ public class BookingsController : UmbracoExtensionApiControllerBase
         _bookingService = bookingService;
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("bookings/{id}")]
     [ProducesResponseType(typeof(Bookings), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Get(
@@ -40,7 +39,7 @@ public class BookingsController : UmbracoExtensionApiControllerBase
         return Ok(booking);
     }
 
-    [HttpGet]
+    [HttpGet("bookings")]
     [ProducesResponseType(typeof(IEnumerable<Bookings>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll(
         [FromQuery] Pagination bookingFilter,
@@ -49,7 +48,7 @@ public class BookingsController : UmbracoExtensionApiControllerBase
         return Ok(await _bookingService.GetAllAsync(bookingFilter, cancellationToken));
     }
 
-    [HttpPost]
+    [HttpPost("bookings")]
     [ProducesResponseType(typeof(object), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create(
@@ -67,7 +66,7 @@ public class BookingsController : UmbracoExtensionApiControllerBase
         return Created(string.Empty, await _bookingService.CreateAsync(dto, email, cancellationToken));
     }
 
-    [HttpPut("{id}/propose")]
+    [HttpPut("bookings/{id}/propose")]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Propose(
@@ -83,7 +82,7 @@ public class BookingsController : UmbracoExtensionApiControllerBase
         return Ok(result);
     }
 
-    [HttpPut("{id}/approve")]
+    [HttpPut("bookings/{id}/approve")]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Approve(
@@ -98,7 +97,7 @@ public class BookingsController : UmbracoExtensionApiControllerBase
         return Ok(result);
     }
 
-    [HttpPut("{id}/reject")]
+    [HttpPut("bookings/{id}/reject")]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Reject(
@@ -113,7 +112,7 @@ public class BookingsController : UmbracoExtensionApiControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("bookings/{id}")]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(
