@@ -11,6 +11,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
     <PackageReference Include="Umbraco.Cms" />
     <PackageReference Include="Umbraco.Cms.DevelopmentMode.Backoffice" />
+    <PackageReference Include="Umbraco.Commerce" />
+    <PackageReference Include="Umbraco.Commerce.PaymentProviders.Stripe" />
     <PackageReference Include="Umbraco.TheStarterKit" />
     <PackageReference Include="uSync" />
   </ItemGroup>

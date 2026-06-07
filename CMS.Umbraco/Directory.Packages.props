@@ -9,6 +9,8 @@
     <PackageVersion Include="Umbraco.Cms" Version="17.4.0" />
     <PackageVersion Include="Umbraco.Cms.DevelopmentMode.Backoffice" Version="17.3.4" />
     <PackageVersion Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
+    <PackageVersion Include="Umbraco.Commerce" Version="17.1.5" />
+    <PackageVersion Include="Umbraco.Commerce.PaymentProviders.Stripe" Version="17.0.0" />
     <PackageVersion Include="Umbraco.TheStarterKit" Version="17.0.0" />
     <PackageVersion Include="uSync" Version="17.3.1" />
   </ItemGroup>
