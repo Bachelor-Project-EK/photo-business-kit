@@ -12,7 +12,7 @@ using Umbraco.Cms.Web.Website.Controllers;
 namespace Umbraco.Extension.Controllers;
 
 [ApiController]
-[Route("umbracoextension/api/v{version:apiVersion}")]
+[Route("umbracoextensionsurface/api/v{version:apiVersion}/members")]
 [UmbracoMemberAuthorize]
 [MapToApi(Constants.SurfaceApiName)]
 public abstract class UmbracoExtensionSurfaceApiControllerBase : SurfaceController
