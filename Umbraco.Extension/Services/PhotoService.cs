@@ -1,17 +1,34 @@
 ﻿using FluentValidation;
 using Umbraco.Cms.Infrastructure.Persistence;
 using Umbraco.Extension.Dtos;
+using Umbraco.Extension.Dtos.Filters;
 using Umbraco.Extension.Models;
+using Umbraco.Extension.Repositories;
 using Umbraco.Extension.Services.Interface;
 
 
 namespace Umbraco.Extension.Services
 {
     public class PhotoService(
+        IPhotoRepository photoRepository,
         IUmbracoDatabaseFactory databaseFactory,
         IAzureBlobPhotoStorageService photoStorageService,
         IValidator<PhotoDto> validator) : IPhotoService
     {
+        public Task<Photos?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            return photoRepository.GetByIdAsync(id, cancellationToken);
+        }
+
+        public async Task<IReadOnlyList<Photos>> GetPhotosByAlbumIdAsync(Guid albumId, Pagination pagination,
+            CancellationToken cancellationToken = default)
+        {
+            var photos =  await photoRepository.GetPhotosByAlbumIdAsync(albumId, cancellationToken);
+            
+            var pagedPhotos = await photos.ToPage(pagination.Page, pagination.PageSize, cancellationToken);
+            return pagedPhotos.Items;
+        }
+
         public async Task<IReadOnlyList<Photos>> UploadToAlbumAsync(
             PhotoDto dto,
             CancellationToken cancellationToken = default)

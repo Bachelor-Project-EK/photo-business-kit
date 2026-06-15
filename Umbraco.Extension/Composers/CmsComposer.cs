@@ -22,6 +22,8 @@ public class CmsComposer : IComposer
         // Register repositories
         builder.Services.AddScoped<BookingRepository>();
         builder.Services.AddScoped<AlbumRepository>();  
+        builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();  
+
 
         // Register services
         builder.Services.AddScoped<BookingService>();

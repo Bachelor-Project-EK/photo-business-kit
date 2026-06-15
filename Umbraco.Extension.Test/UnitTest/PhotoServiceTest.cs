@@ -17,6 +17,7 @@ namespace Umbraco.Extension.Test.UnitTest
         private Mock<IUmbracoDatabase> _readDb = null!;
         private Mock<IUmbracoDatabase> _writeDb = null!;
         private Mock<IAzureBlobPhotoStorageService> _photoStorageService = null!;
+        private Mock<IPhotoRepository> _photoRepository = null!;
         private Mock<IValidator<PhotoDto>> _validator = null!;
 
         private PhotoService _service = null!;
@@ -37,7 +38,10 @@ namespace Umbraco.Extension.Test.UnitTest
                 .Returns(_readDb.Object)
                 .Returns(_writeDb.Object);
 
+            _photoRepository = new Mock<IPhotoRepository>();
+
             _service = new PhotoService(
+                _photoRepository.Object,
                 _databaseFactory.Object,
                 _photoStorageService.Object,
                 _validator.Object);

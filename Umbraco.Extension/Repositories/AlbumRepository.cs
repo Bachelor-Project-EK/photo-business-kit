@@ -12,17 +12,12 @@ public class AlbumRepository(IUmbracoDatabaseFactory factory)
         var result = await database.FetchAsync<Albums>();
         return result;
     }
-
     public async Task<Albums?> GetAlbumByBookingIdAsync(Guid bookingId)
     {
         await using var database = factory.CreateDatabase();
 
         var album = await database.Query<Albums>()
             .FirstOrDefaultAsync(x => x.BookingId == bookingId);
-
-        //album.Photos = await database.Query<Photos>()
-        //    .Where(x => x.AlbumId == album.Id)
-        //    .ToListAsync();
         return album ?? null;
     }
 
