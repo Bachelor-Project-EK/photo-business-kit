@@ -5,7 +5,7 @@ namespace Umbraco.Extension.Dtos;
 public class PhotoDto
 {
 
-    public required Guid AlbumId { get; init; }
+    public required Guid AlbumId { get; set; }
 
     public List<IFormFile>? Files { get; init; }
 

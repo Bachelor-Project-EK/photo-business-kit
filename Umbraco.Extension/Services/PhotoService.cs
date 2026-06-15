@@ -2,13 +2,14 @@
 using Umbraco.Cms.Infrastructure.Persistence;
 using Umbraco.Extension.Dtos;
 using Umbraco.Extension.Models;
+using Umbraco.Extension.Services.Interface;
 
 
 namespace Umbraco.Extension.Services
 {
     public class PhotoService(
         IUmbracoDatabaseFactory databaseFactory,
-        IPhotoStorageService photoStorageService,
+        IAzureBlobPhotoStorageService photoStorageService,
         IValidator<PhotoDto> validator) : IPhotoService
     {
         public async Task<IReadOnlyList<Photos>> UploadToAlbumAsync(
