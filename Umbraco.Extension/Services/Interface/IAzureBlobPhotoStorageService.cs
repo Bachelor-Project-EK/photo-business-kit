@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
-namespace Umbraco.Extension.Services
+namespace Umbraco.Extension.Services.Interface
 {
-    public interface IPhotoStorageService
+    public interface IAzureBlobPhotoStorageService
     {
+        Task<Stream> GetAsync(
+            string blobPath,
+            CancellationToken cancellationToken = default);
+
         Task<string> UploadAsync(
             Guid albumId,
             Guid photoId,
