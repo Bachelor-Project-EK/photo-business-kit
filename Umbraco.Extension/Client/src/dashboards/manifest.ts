@@ -3,10 +3,10 @@ export const manifests: Array<UmbExtensionManifest> = [
     name: "Umbraco Extension Dashboard",
     alias: "Umbraco.Extension.Dashboard",
     type: "dashboard",
-    js: () => import("./dashboard.element.js"),
+    js: () => import("./booking.dashboard.js"),
     meta: {
-      label: "Example Dashboard",
-      pathname: "example-dashboard",
+      label: "Bookings",
+      pathname: "umbraco-extension-dashboard",
     },
     conditions: [
       {
