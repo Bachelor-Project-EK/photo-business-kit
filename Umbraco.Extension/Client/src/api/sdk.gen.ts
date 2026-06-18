@@ -6,7 +6,9 @@ import type {
   BookingActionRequestModel,
   BookingData,
   BookingErrors,
+  BookingResponseModel,
   BookingResponses,
+  GetBookingDataById,
   WhatsMyNameData,
   WhatsMyNameErrors,
   WhatsMyNameResponses,
@@ -36,8 +38,27 @@ export type Options<
 };
 
 export class UmbracoExtensionService {
-  public static ChangeBookingStatus<ThrowOnError extends boolean = false>(
+  public static CreateBooking<ThrowOnError extends boolean = false>(
     options?: Options<BookingData, ThrowOnError>,
+  ) {
+    return (options?.client ?? client).post<
+      BookingResponseModel,
+      BookingErrors,
+      ThrowOnError
+    >({
+      security: [
+        {
+          scheme: "bearer",
+          type: "http",
+        },
+      ],
+      url: "/bookings",
+      ...options,
+    });
+  }
+
+  public static ChangeBookingStatus<ThrowOnError extends boolean = false>(
+    options?: Options<GetBookingDataById, ThrowOnError>,
   ) {
     return (options?.client ?? client).put<
       BookingActionRequestModel,
@@ -50,7 +71,7 @@ export class UmbracoExtensionService {
           type: "http",
         },
       ],
-      url: "/bookings",
+      url: "/bookings/{bookingId}/{action}",
       ...options,
     });
   }
@@ -69,7 +90,7 @@ export class UmbracoExtensionService {
           type: "http",
         },
       ],
-      url: "bookings",
+      url: "/bookings",
       ...options,
     });
   }

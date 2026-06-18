@@ -197,10 +197,30 @@ export type UserModelWritable = {
 
 // bookin-actions
 
-export type BookingActionModel = "approve" | "propose" | "reject";
+export type Email = string;
+
+export type BookingResponseModel = {
+  id: string;
+};
+
+export type BookingRequestModel = {
+  email?: string;
+  startDate: string;
+  endDate: string;
+  comment: string;
+  photoPackageId: string;
+};
+
+export type BookingStatus = "approve" | "propose" | "reject";
+
 export type BookingActionRequestModel = {
   bookingId: string;
-  action: BookingActionModel;
+  action?: BookingStatus;
+};
+
+export type GetBookingDataById = {
+  path?: BookingActionRequestModel;
+  url: "/bookings/{bookingId}";
 };
 
 export type Booking = {
@@ -210,7 +230,7 @@ export type Booking = {
   id: string;
   startDate: string;
   endDate: string;
-  status: string;
+  status: BookingStatus;
   comment: string;
   photoPackage?: {
     name: string;
@@ -221,9 +241,11 @@ export type Booking = {
 };
 
 export type BookingData = {
-  body?: BookingActionRequestModel;
+  body?: BookingRequestModel;
   path?: never;
-  query?: never;
+  query?: {
+    email?: Email;
+  };
   url: "/bookings";
 };
 

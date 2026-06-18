@@ -55,9 +55,9 @@ public class BookingService
                 PhotoPackageId = dto.PhotoPackageId,
                 Status = BookingStatus.Propose.ToString()
             };
-            
+
             return await _repository.CreateAsync(booking, cancellationToken);
-        }        
+        }
 
         return null;
     }
@@ -87,13 +87,10 @@ public class BookingService
         CancellationToken cancellationToken)
     {
         var booking = await _repository.GetAsync(guid, cancellationToken);
-        if (booking is not null && booking.Status == BookingStatus.Pending.ToString())
-        {
-            booking.UpdatedOn = DateTimeOffset.UtcNow;
-            booking.Status = BookingStatus.Approved.ToString();
-            return await _repository.UpdateAsync(booking, cancellationToken);
-        }
-        return null;
+        if (booking is null || booking.Status != nameof(BookingStatus.Propose)) return null;
+        booking.UpdatedOn = DateTimeOffset.UtcNow;
+        booking.Status = nameof(BookingStatus.Approved);
+        return await _repository.UpdateAsync(booking, cancellationToken);
     }
 
     public async Task<int?> RejectAsync(
