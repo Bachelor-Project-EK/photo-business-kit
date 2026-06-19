@@ -134,7 +134,7 @@ export class UmbracoExtensionService {
           type: "http",
         },
       ],
-      url: "/bookings",
+        url: "/umbraco/umbracoextension/api/v1/bookings",
       ...options,
     });
   }
@@ -153,7 +153,7 @@ export class UmbracoExtensionService {
           type: "http",
         },
       ],
-      url: "/bookings/{bookingId}/{action}",
+        url: "/umbraco/umbracoextension/api/v1/bookings/{bookingId}/{action}",
       ...options,
     });
   }
@@ -172,7 +172,7 @@ export class UmbracoExtensionService {
           type: "http",
         },
       ],
-      url: "/bookings",
+        url: "/umbraco/umbracoextension/api/v1/bookings",
       ...options,
     });
   }
