@@ -12,7 +12,7 @@ namespace Umbraco.Extension.Composers
     {
         public void Compose(IUmbracoBuilder builder)
         {
-            builder.AddNotificationAsyncHandler<UmbracoApplicationStartingNotification, RunBookingsMigration>();
+            builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, RunBookingsMigration>();
         }
     }
 }

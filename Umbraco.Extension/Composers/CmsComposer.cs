@@ -21,8 +21,8 @@ public class CmsComposer : IComposer
     {
         // Register repositories
         builder.Services.AddScoped<BookingRepository>();
-        builder.Services.AddScoped<AlbumRepository>();  
-        builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();  
+        builder.Services.AddScoped<AlbumRepository>();
+        builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
 
 
         // Register services
@@ -30,7 +30,6 @@ public class CmsComposer : IComposer
         builder.Services.AddScoped<EventTypeService>();
         builder.Services.AddScoped<PaymentService>();
         builder.Services.AddScoped<PhotoPackageService>();
-        builder.Services.AddScoped<PhotoService>();
         builder.Services.AddScoped<AlbumService>();
 
 
