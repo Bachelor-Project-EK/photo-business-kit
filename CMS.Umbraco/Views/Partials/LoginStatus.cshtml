@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Http.Extensions
 @using Umbraco.Cms.Web.Common.Models
 @using Umbraco.Cms.Web.Website.Controllers
+@using Umbraco.Extension.Controllers.Members
 @using Umbraco.Extensions
 
 @{
@@ -23,5 +24,9 @@
             <button type="submit" class="btn btn-primary">Log out</button>
         }
 
+        @using (Html.BeginForm("GetAll", "Bookings", FormMethod.Get))
+        {
+            <button type="submit">Load bookings</button>
+        }
     </div>
 }

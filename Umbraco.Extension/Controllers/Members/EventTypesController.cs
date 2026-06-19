@@ -14,11 +14,11 @@ namespace Umbraco.Extension.Controllers.Members;
 
 [ApiVersion("1.0")]
 [ApiExplorerSettings(GroupName = "EventTypes")]
-public class EventTypeController : UmbracoExtensionSurfaceApiControllerBase
+public class EventTypesController : UmbracoExtensionSurfaceApiControllerBase
 {
     private readonly EventTypeService _eventTypeService;
 
-    public EventTypeController(
+    public EventTypesController(
         IUmbracoContextAccessor umbracoContextAccessor,
         IUmbracoDatabaseFactory databaseFactory,
         ServiceContext services,
@@ -37,7 +37,7 @@ public class EventTypeController : UmbracoExtensionSurfaceApiControllerBase
         _eventTypeService = eventTypeService;
     }
 
-    [HttpGet("members/eventtypes")]
+    [HttpGet("eventtypes")]
     [ProducesResponseType(typeof(IEnumerable<EventTypeQueryDto>), StatusCodes.Status200OK)]
     public IActionResult MembersGetAll()
     {

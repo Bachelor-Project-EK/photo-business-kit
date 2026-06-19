@@ -12,7 +12,7 @@ using Umbraco.Extension.MigrationPlans;
 
 namespace Umbraco.Extension.Notifications
 {
-    public class RunBookingsMigration : INotificationAsyncHandler<UmbracoApplicationStartingNotification>
+    public class RunBookingsMigration : INotificationAsyncHandler<UmbracoApplicationStartedNotification>
     {
         private readonly ICoreScopeProvider _coreScopeProvider;
         private readonly IMigrationPlanExecutor _migrationPlanExecutor;
@@ -31,7 +31,7 @@ namespace Umbraco.Extension.Notifications
             _runtimeState = runtimeState;
         }
 
-        public async Task HandleAsync(UmbracoApplicationStartingNotification notification, CancellationToken cancellationToken)
+        public async Task HandleAsync(UmbracoApplicationStartedNotification notification, CancellationToken cancellationToken)
         {
             if (_runtimeState.Level < RuntimeLevel.Run)
             {

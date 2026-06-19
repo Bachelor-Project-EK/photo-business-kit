@@ -30,7 +30,6 @@ public class CmsComposer : IComposer
         builder.Services.AddScoped<EventTypeService>();
         builder.Services.AddScoped<PaymentService>();
         builder.Services.AddScoped<PhotoPackageService>();
-        //builder.Services.AddScoped<PhotoService>();
         builder.Services.AddScoped<AlbumService>();
         builder.Services.AddScoped<IPhotoService, PhotoService>();
 
