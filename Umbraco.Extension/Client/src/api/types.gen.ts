@@ -195,6 +195,57 @@ export type UserModelWritable = {
   kind: UserKindModel;
 };
 
+//Photo Packages
+export type PhotoPackage = {
+  eventTypeId: string;
+  photoPackageName: string;
+  photoCount?: number;
+  photoPrice?: number;
+  hourlyPrice?: number;
+};
+export type PhotoPackageErrors = {
+  /**
+   * The resource is protected and requires an authentication token
+   */
+  401: unknown;
+};
+export type PhotoPackageResponses = {
+  /**
+   * OK   */
+  200: Array<PhotoPackage> | PhotoPackage;
+};
+export type PhotoPackageData = {
+  body?: PhotoPackage;
+  path?: never;
+  query?: never;
+  url: "/umbraco/umbracoextension/api/v1/photopackages";
+};
+
+// events
+export type Events = {
+  id?: string;
+  eventTypeName: string;
+};
+
+export type EventErrors = {
+  /**
+   * The resource is protected and requires an authentication token
+   */
+  401: unknown;
+};
+export type EventResponses = {
+  /**
+   * OK
+   */
+  200: Events;
+};
+export type EventData = {
+  body?: Events;
+  path?: never;
+  query?: never;
+  url: "/umbraco/umbracoextension/api/v1/eventtypes";
+};
+
 // bookin-actions
 
 export type Email = string;
@@ -241,7 +292,7 @@ export type Booking = {
 };
 
 export type BookingData = {
-  body?: BookingRequestModel;
+  body?: BookingRequestModel | EventData;
   path?: never;
   query?: {
     email?: Email;

@@ -21,8 +21,8 @@ public class CmsComposer : IComposer
     {
         // Register repositories
         builder.Services.AddScoped<BookingRepository>();
-        builder.Services.AddScoped<AlbumRepository>();  
-        builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();  
+        builder.Services.AddScoped<AlbumRepository>();
+        builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
 
 
         // Register services
@@ -30,8 +30,9 @@ public class CmsComposer : IComposer
         builder.Services.AddScoped<EventTypeService>();
         builder.Services.AddScoped<PaymentService>();
         builder.Services.AddScoped<PhotoPackageService>();
-        builder.Services.AddScoped<PhotoService>();
+        //builder.Services.AddScoped<PhotoService>();
         builder.Services.AddScoped<AlbumService>();
+        builder.Services.AddScoped<IPhotoService, PhotoService>();
 
 
         // Register validators
@@ -40,7 +41,7 @@ public class CmsComposer : IComposer
         builder.Services.AddScoped<IValidator<PaymentCommandDto>, PaymentDtoValidator>();
         builder.Services.AddScoped<IValidator<PhotoPackageCommandDto>, PhotoPackageDtoValidator>();
 
-        builder.Services.AddScoped<IPhotoService, PhotoService>();
+
         builder.Services.AddScoped<IValidator<PhotoDto>, PhotoDtoValidator>();
 
         builder.Services.AddSingleton(sp =>
@@ -49,8 +50,8 @@ public class CmsComposer : IComposer
             var logger = sp.GetRequiredService<ILoggerFactory>()
                 .CreateLogger("BlobStorageConfig");
 
-            var connectionString = configuration.GetConnectionString("umbracoBlobStorage") ?? configuration.GetSection(
-                "Umbraco:Storage:AzureBlob:Media:ConnectionString").Value;
+            var connectionString = configuration.GetConnectionString("umbracoBlobStorage") ??
+                                   configuration.GetSection("Umbraco:Storage:AzureBlob:Media:ConnectionString").Value;
 
             logger.LogInformation(
                 "umbracoBlobStorage connection string exists: {Exists}, length: {Length}",
@@ -63,12 +64,12 @@ public class CmsComposer : IComposer
 
             logger.LogError("umbracoBlobStorage connection string is missing or empty.");
             throw new InvalidOperationException("umbracoBlobStorage connection string is missing.");
-
         });
+
 
         builder.Services.AddScoped<IAzureBlobPhotoStorageService, AzureBlobPhotoStorageService>();
 
-        builder.AddAzureBlobMediaFileSystem();
-        builder.AddAzureBlobImageSharpCache();
+        //builder.AddAzureBlobMediaFileSystem();
+        //builder.AddAzureBlobImageSharpCache();
     }
 }

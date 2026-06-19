@@ -8,7 +8,13 @@ import type {
   BookingErrors,
   BookingResponseModel,
   BookingResponses,
+  EventData,
+  EventErrors,
+  EventResponses,
   GetBookingDataById,
+  PhotoPackageData,
+  PhotoPackageErrors,
+  PhotoPackageResponses,
   WhatsMyNameData,
   WhatsMyNameErrors,
   WhatsMyNameResponses,
@@ -38,6 +44,82 @@ export type Options<
 };
 
 export class UmbracoExtensionService {
+  public static GetAllPhotoPackages<ThrowOnError extends boolean = false>(
+    options?: Options<PhotoPackageData, ThrowOnError>,
+  ) {
+    return (options?.client ?? client).get<
+      PhotoPackageResponses,
+      PhotoPackageErrors,
+      ThrowOnError
+    >({
+      security: [
+        {
+          scheme: "bearer",
+          type: "http",
+        },
+      ],
+      url: "/umbraco/umbracoextension/api/v1/photopackages",
+      ...options,
+    });
+  }
+
+  public static CreatePhotoPackage<ThrowOnError extends boolean = false>(
+    options?: Options<PhotoPackageData, ThrowOnError>,
+  ) {
+    return (options?.client ?? client).post<
+      PhotoPackageResponses,
+      PhotoPackageErrors,
+      ThrowOnError
+    >({
+      security: [
+        {
+          scheme: "bearer",
+          type: "http",
+        },
+      ],
+      url: "/umbraco/umbracoextension/api/v1/photopackages",
+      ...options,
+    });
+  }
+
+  public static CreateEventType<ThrowOnError extends boolean = false>(
+    options?: Options<EventData, ThrowOnError>,
+  ) {
+    return (options?.client ?? client).post<
+      EventResponses,
+      EventErrors,
+      ThrowOnError
+    >({
+      security: [
+        {
+          scheme: "bearer",
+          type: "http",
+        },
+      ],
+      url: "/umbraco/umbracoextension/api/v1/eventtypes",
+      ...options,
+    });
+  }
+
+  public static GetEventTypes<ThrowOnError extends boolean = false>(
+    options?: Options<EventData, ThrowOnError>,
+  ) {
+    return (options?.client ?? client).get<
+      EventResponses,
+      EventErrors,
+      ThrowOnError
+    >({
+      security: [
+        {
+          scheme: "bearer",
+          type: "http",
+        },
+      ],
+      url: "/umbraco/umbracoextension/api/v1/eventtypes",
+      ...options,
+    });
+  }
+
   public static CreateBooking<ThrowOnError extends boolean = false>(
     options?: Options<BookingData, ThrowOnError>,
   ) {
